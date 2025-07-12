@@ -13,9 +13,12 @@ import {
   ExternalLink,
   AlertTriangle,
   Check,
-  X
+  X,
+  Settings as SettingsIcon,
+  Save
 } from 'lucide-react';
 import Image from 'next/image';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface UserData {
   id: string;
@@ -176,421 +179,393 @@ export function SettingsContent() {
   };
 
   const tabs = [
-    { id: 'profile', label: 'Profile', icon: User },
-    // { id: 'domains', label: 'Custom Domains', icon: Globe },
-    // { id: 'security', label: 'Security', icon: Shield },
-    // { id: 'billing', label: 'Billing', icon: Crown },
-    { id: 'danger', label: 'Danger Zone', icon: AlertTriangle },
+    { id: 'profile', label: 'Profile', icon: User, gradient: 'from-blue-500 to-cyan-500' },
+    // { id: 'domains', label: 'Custom Domains', icon: Globe, gradient: 'from-green-500 to-emerald-500' },
+    // { id: 'security', label: 'Security', icon: Shield, gradient: 'from-purple-500 to-violet-500' },
+    // { id: 'billing', label: 'Billing', icon: Crown, gradient: 'from-yellow-500 to-amber-500' },
+    { id: 'danger', label: 'Danger Zone', icon: AlertTriangle, gradient: 'from-red-500 to-pink-500' },
   ];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5, ease: "easeOut" as const }
+    }
+  };
+
+  const tabVariants = {
+    hidden: { opacity: 0, x: -20 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: { duration: 0.3 }
+    },
+    exit: {
+      opacity: 0,
+      x: 20,
+      transition: { duration: 0.2 }
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Settings</h1>
-          <p className="text-gray-600">Manage your account settings and preferences</p>
-        </div>
+        <motion.div
+          className="mb-8"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          {/* Header */}
+          <motion.div className="mb-8" variants={itemVariants}>
+            <h1 className="text-3xl font-bold text-white mb-2 flex items-center">
+              <SettingsIcon size={32} className="mr-3 text-blue-400" />
+              Settings
+            </h1>
+            <p className="text-gray-400">Manage your account settings and preferences</p>
+          </motion.div>
 
-        {/* Success/Error Messages */}
-        {success && (
-          <div className="mb-6 bg-green-50 border border-green-200 rounded-md p-4">
-            <div className="flex items-center">
-              <Check className="text-green-600 mr-2" size={16} />
-              <span className="text-green-800">{success}</span>
-            </div>
-          </div>
-        )}
-
-        {error && (
-          <div className="mb-6 bg-red-50 border border-red-200 rounded-md p-4">
-            <div className="flex items-center">
-              <X className="text-red-600 mr-2" size={16} />
-              <span className="text-red-800">{error}</span>
-            </div>
-          </div>
-        )}
-
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Sidebar */}
-          <div className="lg:col-span-1">
-            <nav className="space-y-1">
-              {tabs.map((tab) => {
-                const Icon = tab.icon;
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${activeTab === tab.id
-                      ? 'bg-blue-50 text-blue-700 border-r-2 border-blue-700'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-                      }`}
-                  >
-                    <Icon size={16} className="mr-3" />
-                    {tab.label}
-                  </button>
-                );
-              })}
-            </nav>
-          </div>
-
-          {/* Content */}
-          <div className="lg:col-span-3">
-            <div className="bg-white rounded-lg shadow">
-              {/* Profile Tab */}
-              {activeTab === 'profile' && (
-                <div className="p-6">
-                  <h2 className="text-lg font-semibold text-gray-900 mb-6">Profile Information</h2>
-
-                  <form action={updateProfile} className="space-y-6">
-                    <div className="flex items-center space-x-6">
-                      {session?.user?.image ? (
-                        <Image
-                          src={session.user.image}
-                          alt={session.user.name || ''}
-                          width={64}
-                          height={64}
-                          className="w-16 h-16 rounded-full"
-                        />
-                      ) : (
-                        <div className="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center">
-                          <User size={24} className="text-gray-600" />
-                        </div>
-                      )}
-                      <div>
-                        <h3 className="text-sm font-medium text-gray-900">Profile Photo</h3>
-                        <p className="text-sm text-gray-500">
-                          Your profile photo is managed by your OAuth provider
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Full Name
-                        </label>
-                        <input
-                          type="text"
-                          name="name"
-                          defaultValue={userData?.name || session?.user?.name || ''}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Email Address
-                        </label>
-                        <input
-                          type="email"
-                          value={userData?.email || session?.user?.email || ''}
-                          disabled
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-500"
-                        />
-                        <p className="text-xs text-gray-500 mt-1">
-                          Email cannot be changed
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Account Tier
-                        </label>
-                        <div className="flex items-center space-x-2">
-                          <span className={`px-2 py-1 text-xs font-medium rounded-full ${userData?.tier === 'PREMIUM'
-                            ? 'bg-yellow-100 text-yellow-800'
-                            : 'bg-gray-100 text-gray-800'
-                            }`}>
-                            {userData?.tier || 'FREE'}
-                          </span>
-                          {userData?.tier === 'FREE' && (
-                            <button
-                              type="button"
-                              className="text-blue-600 hover:text-blue-700 text-sm font-medium"
-                            >
-                              Upgrade to Premium
-                            </button>
-                          )}
-                        </div>
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Member Since
-                        </label>
-                        <p className="text-sm text-gray-900">
-                          {userData?.createdAt
-                            ? new Date(userData.createdAt).toLocaleDateString()
-                            : 'Unknown'
-                          }
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="pt-4">
-                      <button
-                        type="submit"
-                        disabled={loading}
-                        className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 disabled:opacity-50"
-                      >
-                        {loading ? 'Saving...' : 'Save Changes'}
-                      </button>
-                    </div>
-                  </form>
+          {/* Success/Error Messages */}
+          <AnimatePresence>
+            {success && (
+              <motion.div
+                className="mb-6 bg-green-900/50 border border-green-700 rounded-lg p-4 backdrop-blur-sm"
+                initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="flex items-center">
+                  <Check className="text-green-400 mr-3" size={20} />
+                  <span className="text-green-200">{success}</span>
                 </div>
-              )}
+              </motion.div>
+            )}
 
-              {/* Domains Tab */}
-              {activeTab === 'domains' && (
-                <div className="p-6">
-                  <div className="flex items-center justify-between mb-6">
-                    <div>
-                      <h2 className="text-lg font-semibold text-gray-900">Custom Domains</h2>
-                      <p className="text-sm text-gray-600">
-                        Add custom domains for your short links (Premium feature)
-                      </p>
-                    </div>
-                    {userData?.tier !== 'PREMIUM' && (
-                      <span className="bg-yellow-100 text-yellow-800 px-2 py-1 text-xs font-medium rounded-full">
-                        Premium Only
-                      </span>
-                    )}
-                  </div>
+            {error && (
+              <motion.div
+                className="mb-6 bg-red-900/50 border border-red-700 rounded-lg p-4 backdrop-blur-sm"
+                initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="flex items-center">
+                  <X className="text-red-400 mr-3" size={20} />
+                  <span className="text-red-200">{error}</span>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
-                  {userData?.tier === 'PREMIUM' ? (
-                    <>
-                      {/* Add Domain Form */}
-                      <form onSubmit={addDomain} className="mb-6">
-                        <div className="flex space-x-4">
-                          <input
-                            type="text"
-                            placeholder="example.com"
-                            value={newDomain}
-                            onChange={(e) => setNewDomain(e.target.value)}
-                            className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            {/* Sidebar */}
+            <motion.div className="lg:col-span-1" variants={itemVariants}>
+              <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-4">
+                <nav className="space-y-2">
+                  {tabs.map((tab) => {
+                    const Icon = tab.icon;
+                    const isActive = activeTab === tab.id;
+                    return (
+                      <motion.button
+                        key={tab.id}
+                        onClick={() => setActiveTab(tab.id)}
+                        className={`w-full flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all relative overflow-hidden group ${isActive
+                            ? 'bg-gray-700/50 text-white border border-gray-600'
+                            : 'text-gray-400 hover:text-white hover:bg-gray-700/30'
+                          }`}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        {/* Gradient overlay for active tab */}
+                        {isActive && (
+                          <motion.div
+                            className={`absolute inset-0 bg-gradient-to-r ${tab.gradient} opacity-10`}
+                            layoutId="activeTab"
+                            transition={{ type: "spring", stiffness: 300, damping: 30 }}
                           />
-                          <button
+                        )}
+
+                        <motion.div
+                          className={`w-8 h-8 rounded-lg flex items-center justify-center mr-3 ${isActive ? `bg-gradient-to-br ${tab.gradient}` : 'bg-gray-700'
+                            }`}
+                          whileHover={{ rotate: 5 }}
+                        >
+                          <Icon size={16} className={isActive ? 'text-white' : 'text-gray-400'} />
+                        </motion.div>
+                        <span className="relative z-10">{tab.label}</span>
+                      </motion.button>
+                    );
+                  })}
+                </nav>
+              </div>
+            </motion.div>
+
+            {/* Content */}
+            <motion.div className="lg:col-span-3" variants={itemVariants}>
+              <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl shadow-xl overflow-hidden">
+                <AnimatePresence mode="wait">
+                  {/* Profile Tab */}
+                  {activeTab === 'profile' && (
+                    <motion.div
+                      className="p-6"
+                      key="profile"
+                      variants={tabVariants}
+                      initial="hidden"
+                      animate="visible"
+                      exit="exit"
+                    >
+                      <h2 className="text-lg font-semibold text-white mb-6 flex items-center">
+                        <User size={20} className="mr-2 text-blue-400" />
+                        Profile Information
+                      </h2>
+
+                      <form action={updateProfile} className="space-y-6">
+                        <motion.div
+                          className="flex items-center space-x-6"
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.1 }}
+                        >
+                          <motion.div
+                            whileHover={{ scale: 1.05 }}
+                            transition={{ type: "spring", stiffness: 300 }}
+                          >
+                            {session?.user?.image ? (
+                              <Image
+                                src={session.user.image}
+                                alt={session.user.name || ''}
+                                width={64}
+                                height={64}
+                                className="w-16 h-16 rounded-full ring-2 ring-blue-500/50"
+                              />
+                            ) : (
+                              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
+                                <User size={24} className="text-white" />
+                              </div>
+                            )}
+                          </motion.div>
+                          <div>
+                            <h3 className="text-sm font-medium text-white">Profile Photo</h3>
+                            <p className="text-sm text-gray-400">
+                              Your profile photo is managed by your OAuth provider
+                            </p>
+                          </div>
+                        </motion.div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.2 }}
+                          >
+                            <label className="block text-sm font-medium text-gray-300 mb-2">
+                              Full Name
+                            </label>
+                            <input
+                              type="text"
+                              name="name"
+                              defaultValue={userData?.name || session?.user?.name || ''}
+                              className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 transition-all"
+                            />
+                          </motion.div>
+
+                          <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.3 }}
+                          >
+                            <label className="block text-sm font-medium text-gray-300 mb-2">
+                              Email Address
+                            </label>
+                            <input
+                              type="email"
+                              value={userData?.email || session?.user?.email || ''}
+                              disabled
+                              className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-gray-400 cursor-not-allowed"
+                            />
+                            <p className="text-xs text-gray-500 mt-1">
+                              Email cannot be changed
+                            </p>
+                          </motion.div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.4 }}
+                          >
+                            <label className="block text-sm font-medium text-gray-300 mb-2">
+                              Account Tier
+                            </label>
+                            <div className="flex items-center space-x-3">
+                              <motion.span
+                                className={`px-3 py-1 text-xs font-medium rounded-full ${userData?.tier === 'PREMIUM'
+                                    ? 'bg-gradient-to-r from-yellow-500 to-amber-500 text-white'
+                                    : 'bg-gray-700 text-gray-300'
+                                  }`}
+                                whileHover={{ scale: 1.05 }}
+                              >
+                                {userData?.tier || 'FREE'}
+                              </motion.span>
+                              {userData?.tier === 'FREE' && (
+                                <motion.button
+                                  type="button"
+                                  className="text-blue-400 hover:text-blue-300 text-sm font-medium"
+                                  whileHover={{ scale: 1.05 }}
+                                  whileTap={{ scale: 0.95 }}
+                                >
+                                  Upgrade to Premium
+                                </motion.button>
+                              )}
+                            </div>
+                          </motion.div>
+
+                          <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.5 }}
+                          >
+                            <label className="block text-sm font-medium text-gray-300 mb-2">
+                              Member Since
+                            </label>
+                            <p className="text-sm text-white bg-gray-700/30 px-4 py-3 rounded-lg border border-gray-600">
+                              {userData?.createdAt
+                                ? new Date(userData.createdAt).toLocaleDateString()
+                                : 'Unknown'
+                              }
+                            </p>
+                          </motion.div>
+                        </div>
+
+                        <motion.div
+                          className="pt-4"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ delay: 0.6 }}
+                        >
+                          <motion.button
                             type="submit"
                             disabled={loading}
-                            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 disabled:opacity-50 flex items-center"
+                            className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 font-medium flex items-center"
+                            whileHover={{ scale: loading ? 1 : 1.02 }}
+                            whileTap={{ scale: loading ? 1 : 0.98 }}
                           >
-                            <Plus size={16} className="mr-2" />
-                            Add Domain
-                          </button>
-                        </div>
+                            {loading ? (
+                              <>
+                                <motion.div
+                                  className="w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2"
+                                  animate={{ rotate: 360 }}
+                                  transition={{ repeat: Infinity, duration: 1 }}
+                                />
+                                Saving...
+                              </>
+                            ) : (
+                              <>
+                                <Save size={16} className="mr-2" />
+                                Save Changes
+                              </>
+                            )}
+                          </motion.button>
+                        </motion.div>
                       </form>
-
-                      {/* Domains List */}
-                      <div className="space-y-4">
-                        {domains.map((domain) => (
-                          <div key={domain.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-md">
-                            <div className="flex items-center space-x-3">
-                              <Globe size={20} className="text-gray-400" />
-                              <div>
-                                <p className="font-medium text-gray-900">{domain.domain}</p>
-                                <p className="text-sm text-gray-500">
-                                  Added {new Date(domain.createdAt).toLocaleDateString()}
-                                </p>
-                              </div>
-                            </div>
-                            <div className="flex items-center space-x-4">
-                              <span className={`px-2 py-1 text-xs font-medium rounded-full ${domain.isActive
-                                ? 'bg-green-100 text-green-800'
-                                : 'bg-yellow-100 text-yellow-800'
-                                }`}>
-                                {domain.isActive ? 'Active' : 'Pending'}
-                              </span>
-                              <button
-                                onClick={() => deleteDomain(domain.id)}
-                                className="text-red-600 hover:text-red-700"
-                              >
-                                <Trash2 size={16} />
-                              </button>
-                            </div>
-                          </div>
-                        ))}
-
-                        {domains.length === 0 && (
-                          <div className="text-center py-8 text-gray-500">
-                            No custom domains added yet
-                          </div>
-                        )}
-                      </div>
-                    </>
-                  ) : (
-                    <div className="text-center py-12">
-                      <Crown size={48} className="mx-auto text-gray-400 mb-4" />
-                      <h3 className="text-lg font-medium text-gray-900 mb-2">
-                        Premium Feature
-                      </h3>
-                      <p className="text-gray-600 mb-4">
-                        Custom domains are available with Premium subscription
-                      </p>
-                      <button className="bg-yellow-600 text-white px-6 py-2 rounded-md hover:bg-yellow-700">
-                        Upgrade to Premium
-                      </button>
-                    </div>
+                    </motion.div>
                   )}
-                </div>
-              )}
 
-              {/* Security Tab */}
-              {activeTab === 'security' && (
-                <div className="p-6">
-                  <h2 className="text-lg font-semibold text-gray-900 mb-6">Security</h2>
+                  {/* Danger Zone Tab */}
+                  {activeTab === 'danger' && (
+                    <motion.div
+                      className="p-6"
+                      key="danger"
+                      variants={tabVariants}
+                      initial="hidden"
+                      animate="visible"
+                      exit="exit"
+                    >
+                      <h2 className="text-lg font-semibold text-white mb-6 flex items-center">
+                        <AlertTriangle size={20} className="mr-2 text-red-400" />
+                        Danger Zone
+                      </h2>
 
-                  <div className="space-y-6">
-                    <div className="border border-gray-200 rounded-md p-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h3 className="font-medium text-gray-900">Two-Factor Authentication</h3>
-                          <p className="text-sm text-gray-600">
-                            Add an extra layer of security to your account
-                          </p>
-                        </div>
-                        <button className="text-blue-600 hover:text-blue-700 font-medium">
-                          Enable
-                        </button>
-                      </div>
-                    </div>
-
-                    <div className="border border-gray-200 rounded-md p-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h3 className="font-medium text-gray-900">Login Activity</h3>
-                          <p className="text-sm text-gray-600">
-                            View recent login activity and manage sessions
-                          </p>
-                        </div>
-                        <button className="text-blue-600 hover:text-blue-700 font-medium flex items-center">
-                          View Activity
-                          <ExternalLink size={16} className="ml-1" />
-                        </button>
-                      </div>
-                    </div>
-
-                    <div className="border border-gray-200 rounded-md p-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h3 className="font-medium text-gray-900">API Keys</h3>
-                          <p className="text-sm text-gray-600">
-                            Manage API keys for programmatic access
-                          </p>
-                        </div>
-                        <button className="text-blue-600 hover:text-blue-700 font-medium">
-                          Manage Keys
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Billing Tab */}
-              {activeTab === 'billing' && (
-                <div className="p-6">
-                  <h2 className="text-lg font-semibold text-gray-900 mb-6">Billing</h2>
-
-                  <div className="space-y-6">
-                    <div className="border border-gray-200 rounded-md p-6">
-                      <div className="flex items-center justify-between mb-4">
-                        <h3 className="font-medium text-gray-900">Current Plan</h3>
-                        <span className={`px-3 py-1 text-sm font-medium rounded-full ${userData?.tier === 'PREMIUM'
-                          ? 'bg-yellow-100 text-yellow-800'
-                          : 'bg-gray-100 text-gray-800'
-                          }`}>
-                          {userData?.tier || 'FREE'}
-                        </span>
-                      </div>
-
-                      {userData?.tier === 'FREE' ? (
-                        <div>
-                          <p className="text-gray-600 mb-4">
-                            You&apos;re currently on the free plan with basic features.
-                          </p>
-                          <button className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700">
-                            Upgrade to Premium - $9.99/month
-                          </button>
-                        </div>
-                      ) : (
-                        <div>
-                          <p className="text-gray-600 mb-4">
-                            You have access to all premium features including custom domains and advanced analytics.
-                          </p>
-                          <div className="flex space-x-4">
-                            <button className="text-blue-600 hover:text-blue-700 font-medium">
-                              View Billing History
-                            </button>
-                            <button className="text-red-600 hover:text-red-700 font-medium">
-                              Cancel Subscription
-                            </button>
+                      <motion.div
+                        className="border border-red-700/50 rounded-xl p-6 bg-red-900/20 backdrop-blur-sm"
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.2 }}
+                        whileHover={{ scale: 1.01 }}
+                      >
+                        <div className="flex items-start space-x-4">
+                          <motion.div
+                            animate={{ rotate: [0, 5, -5, 0] }}
+                            transition={{ repeat: Infinity, duration: 3 }}
+                          >
+                            <AlertTriangle className="text-red-400 mt-1" size={24} />
+                          </motion.div>
+                          <div className="flex-1">
+                            <h3 className="font-medium text-red-300 mb-2">Delete Account</h3>
+                            <p className="text-sm text-red-200 mb-4">
+                              Permanently delete your account and all associated data.
+                              This action cannot be undone and will immediately delete:
+                            </p>
+                            <motion.ul
+                              className="text-sm text-red-200 space-y-1 mb-6"
+                              variants={containerVariants}
+                              initial="hidden"
+                              animate="visible"
+                            >
+                              {[
+                                'All your shortened links',
+                                'Analytics data',
+                                'Custom domains',
+                                'Account settings'
+                              ].map((item, index) => (
+                                <motion.li
+                                  key={index}
+                                  className="flex items-center"
+                                  variants={itemVariants}
+                                  transition={{ delay: index * 0.1 + 0.3 }}
+                                >
+                                  <div className="w-1.5 h-1.5 bg-red-400 rounded-full mr-3" />
+                                  {item}
+                                </motion.li>
+                              ))}
+                            </motion.ul>
+                            <motion.button
+                              onClick={deleteAccount}
+                              className="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 font-medium transition-colors flex items-center group"
+                              whileHover={{ scale: 1.02 }}
+                              whileTap={{ scale: 0.98 }}
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              transition={{ delay: 0.7 }}
+                            >
+                              <Trash2 size={16} className="mr-2 group-hover:rotate-12 transition-transform" />
+                              Delete My Account
+                            </motion.button>
                           </div>
                         </div>
-                      )}
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="border border-gray-200 rounded-md p-4">
-                        <h4 className="font-medium text-gray-900 mb-2">Free Plan</h4>
-                        <ul className="text-sm text-gray-600 space-y-1">
-                          <li>• Up to 100 links</li>
-                          <li>• Basic analytics</li>
-                          <li>• Password protection</li>
-                          <li>• Link expiration</li>
-                        </ul>
-                      </div>
-
-                      <div className="border border-gray-200 rounded-md p-4">
-                        <h4 className="font-medium text-gray-900 mb-2">Premium Plan</h4>
-                        <ul className="text-sm text-gray-600 space-y-1">
-                          <li>• Unlimited links</li>
-                          <li>• Advanced analytics</li>
-                          <li>• Custom domains</li>
-                          <li>• API access</li>
-                          <li>• Priority support</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Danger Zone Tab */}
-              {activeTab === 'danger' && (
-                <div className="p-6">
-                  <h2 className="text-lg font-semibold text-gray-900 mb-6">Danger Zone</h2>
-
-                  <div className="border border-red-200 rounded-md p-6 bg-red-50">
-                    <div className="flex items-start space-x-3">
-                      <AlertTriangle className="text-red-600 mt-1" size={20} />
-                      <div className="flex-1">
-                        <h3 className="font-medium text-red-900 mb-2">Delete Account</h3>
-                        <p className="text-sm text-red-700 mb-4">
-                          Permanently delete your account and all associated data.
-                          This action cannot be undone and will immediately delete:
-                        </p>
-                        <ul className="text-sm text-red-700 space-y-1 mb-4">
-                          <li>• All your shortened links</li>
-                          <li>• Analytics data</li>
-                          <li>• Custom domains</li>
-                          <li>• Account settings</li>
-                        </ul>
-                        <button
-                          onClick={deleteAccount}
-                          className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 font-medium"
-                        >
-                          Delete My Account
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
+                      </motion.div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
