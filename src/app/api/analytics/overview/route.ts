@@ -131,11 +131,14 @@ export async function GET() {
     });
 
     // Group by day
-    const dailyStatsGrouped = dailyStats.reduce((acc, click) => {
-      const day = click.clickedAt.toISOString().split('T')[0];
-      acc[day] = (acc[day] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
+    const dailyStatsGrouped = dailyStats.reduce(
+      (acc: Record<string, number>, click) => {
+        const day = click.clickedAt.toISOString().split('T')[0];
+        acc[day] = (acc[day] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>
+    );
 
     // Get country stats
     const countryStats = await prisma.analytics.findMany({
