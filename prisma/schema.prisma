@@ -23,6 +23,8 @@ model User {
   accounts Account[]
   sessions Session[]
 
+  @@index([email])
+  @@index([createdAt])
   @@map("users")
 }
 
@@ -43,6 +45,7 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
   @@map("accounts")
 }
 
@@ -53,6 +56,8 @@ model Session {
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@index([userId])
+  @@index([expires])
   @@map("sessions")
 }
 
@@ -81,6 +86,11 @@ model Link {
 
   analytics Analytics[]
 
+  @@index([userId])
+  @@index([domainId])
+  @@index([shortCode])
+  @@index([isActive])
+  @@index([createdAt])
   @@map("links")
 }
 
@@ -96,6 +106,9 @@ model Domain {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   links  Link[]
 
+  @@index([userId])
+  @@index([domain])
+  @@index([isActive])
   @@map("domains")
 }
 
@@ -116,6 +129,9 @@ model Analytics {
   linkId String @map("link_id")
   link   Link   @relation(fields: [linkId], references: [id], onDelete: Cascade)
 
+  @@index([linkId])
+  @@index([clickedAt])
+  @@index([country])
   @@map("analytics")
 }
 
@@ -130,5 +146,7 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+  @@index([identifier])
+  @@index([expires])
   @@map("verificationtokens")
 }
