@@ -1,4 +1,4 @@
-# 🔗 Zypdd
+# 🔗 Zyppd
 
 A modern, feature-rich URL shortener built with Next.js 14, offering custom domains, advanced analytics, and premium features for businesses and professionals.
 
@@ -9,7 +9,7 @@ A modern, feature-rich URL shortener built with Next.js 14, offering custom doma
 - Password protection for links
 - Link expiration dates
 - Basic analytics (clicks, countries, referrers)
-- Branded short links with zypdd.com domain
+- Branded short links with zyppd.com domain
 
 ### 👑 Premium Tier
 - Custom domains (use your own domain)
@@ -30,7 +30,7 @@ A modern, feature-rich URL shortener built with Next.js 14, offering custom doma
 1. **Clone the repository**
    ```bash
    git clone https://github.com/rishikesh-suvarna/zyppd.git
-   cd zypdd
+   cd zyppd
    ```
 
 2. **Install dependencies**
@@ -46,7 +46,7 @@ A modern, feature-rich URL shortener built with Next.js 14, offering custom doma
    Fill in your environment variables:
    ```env
    # Database
-   DATABASE_URL="postgresql://username:password@localhost:5432/zypdd"
+   DATABASE_URL="postgresql://username:password@localhost:5432/zyppd"
    
    # NextAuth
    NEXTAUTH_URL="http://localhost:3000"
@@ -155,7 +155,7 @@ GET /api/links/{linkId}/analytics
 ## 📁 Project Structure
 
 ```
-zypdd/
+zyppd/
 ├── app/                    # Next.js app directory
 │   ├── api/               # API routes
 │   ├── auth/              # Authentication pages
@@ -182,4 +182,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🆘 Support
 
 - 📧 Email: rishikeshsuvarna@gmail.com
-- 🐛 Issues: [GitHub Issues](https://github.com/rishikesh-suvarna/zypdd/issues)
+- 🐛 Issues: [GitHub Issues](https://github.com/rishikesh-suvarna/zyppd/issues)
