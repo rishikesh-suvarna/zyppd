@@ -5,14 +5,15 @@ import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { AnalyticsView } from '@/components/AnalyticsView';
 
-export default async function AnalyticsPage({ params }: any) {
+export default async function AnalyticsPage(props: any) {
   const session = await getServerSession(authOptions);
 
   if (!session) {
     redirect('/auth/signin');
   }
 
-  const { id } = params;
+  const { params } = props;
+  const { id } = await params;
 
   const link = await prisma.link.findFirst({
     where: {

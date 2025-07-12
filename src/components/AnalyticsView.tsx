@@ -86,29 +86,29 @@ export function AnalyticsView({ link }: { link: Link }) {
       title: "Total Clicks",
       value: analytics.totalClicks,
       icon: Eye,
-      gradient: "from-blue-500 to-cyan-500",
-      iconColor: "text-blue-400"
+      gradient: "bg-black",
+      iconColor: "text-white"
     },
     {
       title: "Last 7 Days",
       value: analytics.recentClicks,
       icon: Calendar,
-      gradient: "from-green-500 to-emerald-500",
-      iconColor: "text-green-400"
+      gradient: "bg-black",
+      iconColor: "text-white"
     },
     {
       title: "Countries",
       value: Object.keys(analytics.countryStats).length,
       icon: Globe,
-      gradient: "from-purple-500 to-violet-500",
-      iconColor: "text-purple-400"
+      gradient: "bg-black",
+      iconColor: "text-white"
     },
     {
       title: "Unique Visitors",
       value: analytics.recentAnalytics.length,
       icon: Users,
-      gradient: "from-orange-500 to-red-500",
-      iconColor: "text-orange-400"
+      gradient: "bg-black",
+      iconColor: "text-white"
     }
   ] : [];
 
@@ -136,7 +136,7 @@ export function AnalyticsView({ link }: { link: Link }) {
 
           {/* Link Info Card */}
           <motion.div
-            className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl shadow-xl p-6 mb-8"
+            className="bg-black backdrop-blur-sm border border-gray-700 rounded-xl shadow-xl p-6 mb-8"
             variants={itemVariants}
             whileHover={{ scale: 1.01 }}
             transition={{ type: "spring", stiffness: 300 }}
@@ -144,7 +144,7 @@ export function AnalyticsView({ link }: { link: Link }) {
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <h1 className="text-2xl font-bold text-white mb-3 flex items-center">
-                  <BarChart3 size={28} className="mr-3 text-blue-400" />
+                  <BarChart3 size={28} className="mr-3 text-white" />
                   {link.title || link.shortCode}
                 </h1>
                 <div className="space-y-2 text-sm text-gray-300">
@@ -166,11 +166,11 @@ export function AnalyticsView({ link }: { link: Link }) {
               </div>
 
               <motion.div
-                className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl flex items-center justify-center"
+                className="w-16 h-16 bg-white rounded-xl flex items-center justify-center"
                 whileHover={{ rotate: 5, scale: 1.05 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
-                <BarChart3 size={24} className="text-white" />
+                <BarChart3 size={24} className="text-black" />
               </motion.div>
             </div>
           </motion.div>
@@ -185,7 +185,7 @@ export function AnalyticsView({ link }: { link: Link }) {
                 {statCards.map((card, index) => (
                   <motion.div
                     key={card.title}
-                    className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl shadow-xl p-6 relative overflow-hidden group"
+                    className="bg-black backdrop-blur-sm border border-gray-700 rounded-xl shadow-xl p-6 relative overflow-hidden group"
                     variants={itemVariants}
                     whileHover={{
                       scale: 1.02,
@@ -195,7 +195,7 @@ export function AnalyticsView({ link }: { link: Link }) {
                   >
                     {/* Gradient overlay on hover */}
                     <motion.div
-                      className={`absolute inset-0 bg-gradient-to-br ${card.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}
+                      className={`absolute inset-0 bg-black ${card.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}
                       initial={false}
                     />
 
@@ -231,13 +231,13 @@ export function AnalyticsView({ link }: { link: Link }) {
               >
                 {/* Daily Stats */}
                 <motion.div
-                  className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl shadow-xl p-6"
+                  className="bg-black backdrop-blur-sm border border-gray-700 rounded-xl shadow-xl p-6"
                   variants={itemVariants}
                   whileHover={{ scale: 1.01 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
                   <h3 className="text-lg font-semibold text-white mb-6 flex items-center">
-                    <Calendar size={20} className="mr-2 text-blue-400" />
+                    <Calendar size={20} className="mr-2 text-white" />
                     Daily Clicks (Last 30 Days)
                   </h3>
                   <div className="space-y-3">
@@ -256,7 +256,7 @@ export function AnalyticsView({ link }: { link: Link }) {
                           <div className="flex items-center space-x-3">
                             <div className="w-24 bg-gray-700 rounded-full h-2 overflow-hidden">
                               <motion.div
-                                className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full"
+                                className="bg-white h-2 rounded-full"
                                 initial={{ width: 0 }}
                                 animate={{
                                   width: `${(clicks / Math.max(...Object.values(analytics.dailyStats))) * 100}%`
@@ -273,13 +273,13 @@ export function AnalyticsView({ link }: { link: Link }) {
 
                 {/* Country Stats */}
                 <motion.div
-                  className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl shadow-xl p-6"
+                  className="bg-black backdrop-blur-sm border border-gray-700 rounded-xl shadow-xl p-6"
                   variants={itemVariants}
                   whileHover={{ scale: 1.01 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
                   <h3 className="text-lg font-semibold text-white mb-6 flex items-center">
-                    <Globe size={20} className="mr-2 text-green-400" />
+                    <Globe size={20} className="mr-2 text-white" />
                     Top Countries
                   </h3>
                   <div className="space-y-3">
@@ -298,7 +298,7 @@ export function AnalyticsView({ link }: { link: Link }) {
                           <div className="flex items-center space-x-3">
                             <div className="w-24 bg-gray-700 rounded-full h-2 overflow-hidden">
                               <motion.div
-                                className="bg-gradient-to-r from-green-500 to-emerald-500 h-2 rounded-full"
+                                className="bg-white h-2 rounded-full"
                                 initial={{ width: 0 }}
                                 animate={{
                                   width: `${(clicks / Math.max(...Object.values(analytics.countryStats))) * 100}%`
@@ -316,13 +316,13 @@ export function AnalyticsView({ link }: { link: Link }) {
 
               {/* Recent Activity */}
               <motion.div
-                className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl shadow-xl p-6"
+                className="bg-black backdrop-blur-sm border border-gray-700 rounded-xl shadow-xl p-6"
                 variants={itemVariants}
                 whileHover={{ scale: 1.01 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
                 <h3 className="text-lg font-semibold text-white mb-6 flex items-center">
-                  <Activity size={20} className="mr-2 text-purple-400" />
+                  <Activity size={20} className="mr-2 text-white" />
                   Recent Activity
                 </h3>
                 <div className="space-y-3 max-h-96 overflow-y-auto">
@@ -336,7 +336,7 @@ export function AnalyticsView({ link }: { link: Link }) {
                     >
                       <div className="flex items-center space-x-3">
                         <motion.div
-                          className="w-2 h-2 bg-blue-400 rounded-full"
+                          className="w-2 h-2 bg-white rounded-full"
                           animate={{ scale: [1, 1.2, 1] }}
                           transition={{ repeat: Infinity, duration: 2, delay: index * 0.2 }}
                         />
@@ -348,7 +348,7 @@ export function AnalyticsView({ link }: { link: Link }) {
                       </div>
                       <div className="flex items-center space-x-4 text-sm text-gray-400">
                         <div className="flex items-center space-x-2">
-                          <Globe size={14} className="text-green-400" />
+                          <Globe size={14} className="text-white" />
                           <span className="bg-gray-700/50 px-2 py-1 rounded text-xs">
                             {activity.country || 'Unknown'}
                           </span>

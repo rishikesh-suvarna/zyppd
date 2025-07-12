@@ -9,7 +9,7 @@ export async function DELETE(
   request: Request,
   context: { params: any }
 ) {
-  const { id } = context.params;
+  const { id } = await context.params;
 
   try {
     const session = await getServerSession(authOptions);

@@ -107,7 +107,7 @@ export function OverallAnalytics() {
           <div className="text-red-400 mb-4 text-lg">{error}</div>
           <motion.button
             onClick={fetchAnalytics}
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+            className="bg-black text-white px-6 py-3 rounded-lg transition-colors"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -131,29 +131,29 @@ export function OverallAnalytics() {
       title: "Total Links",
       value: analytics.totalLinks,
       icon: Link2,
-      gradient: "from-blue-500 to-cyan-500",
-      iconColor: "text-blue-400"
+      gradient: "bg-white",
+      iconColor: "text-black"
     },
     {
       title: "Total Clicks",
       value: analytics.totalClicks,
       icon: Eye,
-      gradient: "from-green-500 to-emerald-500",
-      iconColor: "text-green-400"
+      gradient: "bg-white",
+      iconColor: "text-black"
     },
     {
       title: "This Week",
       value: analytics.clicksThisWeek,
       icon: Calendar,
-      gradient: "from-purple-500 to-violet-500",
-      iconColor: "text-purple-400"
+      gradient: "bg-white",
+      iconColor: "text-black"
     },
     {
       title: "This Month",
       value: analytics.clicksThisMonth,
       icon: TrendingUp,
-      gradient: "from-orange-500 to-red-500",
-      iconColor: "text-orange-400"
+      gradient: "bg-white",
+      iconColor: "text-black"
     }
   ];
 
@@ -169,7 +169,7 @@ export function OverallAnalytics() {
           {/* Header */}
           <motion.div className="mb-8" variants={itemVariants}>
             <h1 className="text-3xl font-bold text-white mb-2 flex items-center">
-              <BarChart3 size={32} className="mr-3 text-blue-400" />
+              <BarChart3 size={32} className="mr-3 text-white" />
               Analytics Overview
             </h1>
             <p className="text-gray-400">Track your link performance and engagement metrics</p>
@@ -183,7 +183,7 @@ export function OverallAnalytics() {
             {statCards.map((card, index) => (
               <motion.div
                 key={card.title}
-                className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl shadow-xl p-6 relative overflow-hidden group"
+                className="bg-black backdrop-blur-sm border border-gray-700 rounded-xl shadow-xl p-6 relative overflow-hidden group"
                 variants={itemVariants}
                 whileHover={{
                   scale: 1.02,
@@ -215,7 +215,7 @@ export function OverallAnalytics() {
                     whileHover={{ rotate: 5, scale: 1.1 }}
                     transition={{ type: "spring", stiffness: 300 }}
                   >
-                    <card.icon size={24} className="text-white" />
+                    <card.icon size={24} className="text-black" />
                   </motion.div>
                 </div>
 
@@ -239,7 +239,7 @@ export function OverallAnalytics() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
             {/* Top Performing Links */}
             <motion.div
-              className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl shadow-xl p-6"
+              className="bg-black backdrop-blur-sm border border-gray-700 rounded-xl shadow-xl p-6"
               variants={itemVariants}
               whileHover={{ scale: 1.01 }}
               transition={{ type: "spring", stiffness: 300 }}
@@ -247,7 +247,7 @@ export function OverallAnalytics() {
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-lg font-semibold text-white flex items-center">
                   <motion.div
-                    className="w-2 h-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mr-3"
+                    className="w-2 h-2 bg-white rounded-full mr-3"
                     animate={{ scale: [1, 1.2, 1] }}
                     transition={{ repeat: Infinity, duration: 2 }}
                   />
@@ -256,7 +256,7 @@ export function OverallAnalytics() {
                 <motion.div whileHover={{ scale: 1.05 }}>
                   <Link
                     href="/dashboard"
-                    className="text-blue-400 hover:text-blue-300 flex items-center text-sm group"
+                    className="text-white flex items-center text-sm group"
                   >
                     View All
                     <ArrowRight size={16} className="ml-1 group-hover:translate-x-1 transition-transform" />
@@ -289,7 +289,7 @@ export function OverallAnalytics() {
                       <p className="text-xs text-gray-400 truncate mt-1 ml-8">{link.originalUrl}</p>
                     </div>
                     <div className="flex items-center space-x-3">
-                      <span className="text-sm font-semibold text-green-400">
+                      <span className="text-sm font-semibold text-white">
                         {link.clicks} clicks
                       </span>
                       <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
@@ -308,13 +308,13 @@ export function OverallAnalytics() {
 
             {/* Recent Activity */}
             <motion.div
-              className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl shadow-xl p-6"
+              className="bg-black backdrop-blur-sm border border-gray-700 rounded-xl shadow-xl p-6"
               variants={itemVariants}
               whileHover={{ scale: 1.01 }}
               transition={{ type: "spring", stiffness: 300 }}
             >
               <h3 className="text-lg font-semibold text-white mb-6 flex items-center">
-                <Activity size={20} className="mr-2 text-green-400" />
+                <Activity size={20} className="mr-2 text-white" />
                 Recent Activity
               </h3>
 
@@ -329,7 +329,7 @@ export function OverallAnalytics() {
                   >
                     <div className="flex items-center space-x-3">
                       <motion.div
-                        className="w-2 h-2 bg-green-400 rounded-full"
+                        className="w-2 h-2 bg-white rounded-full"
                         animate={{ scale: [1, 1.2, 1] }}
                         transition={{ repeat: Infinity, duration: 2, delay: index * 0.2 }}
                       />
@@ -343,7 +343,7 @@ export function OverallAnalytics() {
                       </div>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <Globe size={14} className="text-blue-400" />
+                      <Globe size={14} className="text-white" />
                       <span className="text-xs text-gray-300 bg-gray-700/50 px-2 py-1 rounded">
                         {activity.country || 'Unknown'}
                       </span>
@@ -361,7 +361,7 @@ export function OverallAnalytics() {
           >
             {/* Daily Clicks Chart */}
             <motion.div
-              className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl shadow-xl p-6"
+              className="bg-black backdrop-blur-sm border border-gray-700 rounded-xl shadow-xl p-6"
               variants={itemVariants}
               whileHover={{ scale: 1.01 }}
               transition={{ type: "spring", stiffness: 300 }}
@@ -388,7 +388,7 @@ export function OverallAnalytics() {
                       <div className="flex items-center space-x-3">
                         <div className="w-32 bg-gray-700 rounded-full h-2 overflow-hidden">
                           <motion.div
-                            className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full"
+                            className="bg-white h-2 rounded-full"
                             initial={{ width: 0 }}
                             animate={{
                               width: `${(clicks / Math.max(...Object.values(analytics.dailyStats))) * 100}%`
@@ -407,13 +407,13 @@ export function OverallAnalytics() {
 
             {/* Country Stats */}
             <motion.div
-              className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl shadow-xl p-6"
+              className="bg-black backdrop-blur-sm border border-gray-700 rounded-xl shadow-xl p-6"
               variants={itemVariants}
               whileHover={{ scale: 1.01 }}
               transition={{ type: "spring", stiffness: 300 }}
             >
               <h3 className="text-lg font-semibold text-white mb-6 flex items-center">
-                <Globe size={20} className="mr-2 text-green-400" />
+                <Globe size={20} className="mr-2 text-white" />
                 Top Countries
               </h3>
               <div className="space-y-3">
@@ -432,7 +432,7 @@ export function OverallAnalytics() {
                       <div className="flex items-center space-x-3">
                         <div className="w-32 bg-gray-700 rounded-full h-2 overflow-hidden">
                           <motion.div
-                            className="bg-gradient-to-r from-green-500 to-emerald-500 h-2 rounded-full"
+                            className="bg-white h-2 rounded-full"
                             initial={{ width: 0 }}
                             animate={{
                               width: `${(clicks / Math.max(...Object.values(analytics.countryStats))) * 100}%`
