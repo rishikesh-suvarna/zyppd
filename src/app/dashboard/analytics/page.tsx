@@ -1,15 +1,14 @@
-
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { redirect } from 'next/navigation';
-import { DashboardContent } from '@/components/DashboardContent';
+import { OverallAnalytics } from '@/components/OverallAnalytics';
 
-export default async function DashboardPage() {
+export default async function AnalyticsPage() {
   const session = await getServerSession(authOptions);
 
   if (!session) {
     redirect('/auth/signin');
   }
 
-  return <DashboardContent />;
+  return <OverallAnalytics />;
 }

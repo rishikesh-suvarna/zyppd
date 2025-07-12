@@ -1,1 +1,134 @@
-// ...empty file...
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  name          String?
+  image         String?
+  emailVerified Boolean? @default(false) // Optional field for email verification
+  tier          UserTier @default(FREE)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  links    Link[]
+  domains  Domain[]
+  accounts Account[]
+  sessions Session[]
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model Link {
+  id          String  @id @default(cuid())
+  originalUrl String  @map("original_url")
+  shortCode   String  @unique @map("short_code")
+  title       String?
+  description String?
+
+  // Settings
+  password  String? // Hashed password for protection
+  expiresAt DateTime? @map("expires_at")
+  isActive  Boolean   @default(true) @map("is_active")
+
+  // Metadata
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  domainId String? @map("domain_id")
+  domain   Domain? @relation(fields: [domainId], references: [id])
+
+  analytics Analytics[]
+
+  @@map("links")
+}
+
+model Domain {
+  id        String   @id @default(cuid())
+  domain    String   @unique
+  isActive  Boolean  @default(false) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  links  Link[]
+
+  @@map("domains")
+}
+
+model Analytics {
+  id String @id @default(cuid())
+
+  // Click data
+  clickedAt DateTime @default(now()) @map("clicked_at")
+  ipAddress String?  @map("ip_address")
+  userAgent String?  @map("user_agent")
+  referer   String?
+
+  // Geo data
+  country String?
+  city    String?
+
+  // Relations
+  linkId String @map("link_id")
+  link   Link   @relation(fields: [linkId], references: [id], onDelete: Cascade)
+
+  @@map("analytics")
+}
+
+enum UserTier {
+  FREE
+  PREMIUM
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verificationtokens")
+}
