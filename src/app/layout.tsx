@@ -9,7 +9,54 @@ const lato = Lato({ subsets: ['latin'], weight: ['100', '300', '400', '700', '90
 
 export const metadata: Metadata = {
   title: 'Zyppd - Professional URL Shortener',
-  description: 'Create custom short links with analytics, password protection, and custom domains.',
+  description: 'Create custom short links with analytics, password protection, and custom domains. Transform your link management with our powerful, dark-themed platform.',
+  keywords: [
+    'URL shortener',
+    'link management',
+    'analytics',
+    'custom domains',
+    'password protection',
+    'short links',
+    'Zyppd'
+  ],
+  authors: [{ name: 'Zyppd Team', url: 'https://zyppd.com' }],
+  creator: 'Zyppd',
+  publisher: 'Zyppd',
+  openGraph: {
+    type: 'website',
+    url: 'https://zyppd.com',
+    siteName: 'Zyppd',
+    title: 'Zyppd - Professional URL Shortener',
+    description: 'Create custom short links with analytics, password protection, and custom domains.',
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Zyppd - Professional URL Shortener',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@zyppd',
+    creator: '@zyppd',
+    title: 'Zyppd - Professional URL Shortener',
+    description: 'Create custom short links with analytics, password protection, and custom domains.',
+    images: ['/og-image.jpg'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'),
 };
 
 export default function RootLayout({
