@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import {
   User,
   Globe,
@@ -165,7 +165,7 @@ export function SettingsContent() {
       });
 
       if (response.ok) {
-        window.location.href = '/';
+        await signOut({ callbackUrl: "/" });
       } else {
         const errorData = await response.json();
         setError(errorData.error || 'Failed to delete account');
