@@ -4,6 +4,8 @@ import { prisma } from '@/lib/prisma';
 import { headers } from 'next/headers';
 import bcrypt from 'bcryptjs';
 import { PasswordForm } from '@/components/PasswordForm';
+import { NotFoundPage } from '@/components/NotFoundPage';
+import { ExpiredPage } from '@/components/ExpiredPage';
 
 export default async function RedirectPage({ params, searchParams }: any) {
   const { shortCode } = params;
@@ -21,26 +23,12 @@ export default async function RedirectPage({ params, searchParams }: any) {
   });
 
   if (!link || !link.isActive) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Link Not Found</h1>
-          <p className="text-gray-600">This link doesn&apos;t exist or has been deactivated.</p>
-        </div>
-      </div>
-    );
+    return <NotFoundPage />;
   }
 
   // Check if link has expired
   if (link.expiresAt && new Date() > link.expiresAt) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Link Expired</h1>
-          <p className="text-gray-600">This link has expired and is no longer available.</p>
-        </div>
-      </div>
-    );
+    return <ExpiredPage />;
   }
 
   // Check if password is required

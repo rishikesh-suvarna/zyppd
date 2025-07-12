@@ -3,8 +3,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { ArrowLeft, Calendar, Globe, Eye, Users } from 'lucide-react';
+import { ArrowLeft, Calendar, Globe, Eye, Users, BarChart3, Activity } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
 
 interface Link {
   id: string;
@@ -48,158 +49,336 @@ export function AnalyticsView({ link }: { link: Link }) {
     ? `https://${link.domain.domain}/${link.shortCode}`
     : `${typeof window !== 'undefined' ? window.location.origin : ''}/${link.shortCode}`;
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5, ease: "easeOut" as const }
+    }
+  };
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <motion.div
+          className="w-12 h-12 border-2 border-blue-600 border-t-transparent rounded-full"
+          animate={{ rotate: 360 }}
+          transition={{ repeat: Infinity, duration: 1 }}
+        />
       </div>
     );
   }
 
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <button
-            onClick={() => router.push('/dashboard')}
-            className="flex items-center text-gray-600 hover:text-gray-900 mb-4"
-          >
-            <ArrowLeft size={20} className="mr-2" />
-            Back to Dashboard
-          </button>
+  const statCards = analytics ? [
+    {
+      title: "Total Clicks",
+      value: analytics.totalClicks,
+      icon: Eye,
+      gradient: "from-blue-500 to-cyan-500",
+      iconColor: "text-blue-400"
+    },
+    {
+      title: "Last 7 Days",
+      value: analytics.recentClicks,
+      icon: Calendar,
+      gradient: "from-green-500 to-emerald-500",
+      iconColor: "text-green-400"
+    },
+    {
+      title: "Countries",
+      value: Object.keys(analytics.countryStats).length,
+      icon: Globe,
+      gradient: "from-purple-500 to-violet-500",
+      iconColor: "text-purple-400"
+    },
+    {
+      title: "Unique Visitors",
+      value: analytics.recentAnalytics.length,
+      icon: Users,
+      gradient: "from-orange-500 to-red-500",
+      iconColor: "text-orange-400"
+    }
+  ] : [];
 
-          <div className="bg-white rounded-lg shadow p-6 mb-6">
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">
-              {link.title || link.shortCode}
-            </h1>
-            <div className="text-sm text-gray-500 space-y-1">
-              <p>Short URL: <span className="font-medium text-blue-600">{shortUrl}</span></p>
-              <p>Original URL: <span className="font-medium">{link.originalUrl}</span></p>
-              <p>Created: {new Date(link.createdAt).toLocaleDateString()}</p>
+  return (
+    <div className="min-h-screen bg-black">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <motion.div
+          className="mb-8"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          {/* Back Button */}
+          <motion.div variants={itemVariants}>
+            <motion.button
+              onClick={() => router.push('/dashboard')}
+              className="flex items-center text-gray-400 hover:text-white mb-6 group"
+              whileHover={{ x: -5 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
+              <ArrowLeft size={20} className="mr-2 group-hover:-translate-x-1 transition-transform" />
+              Back to Dashboard
+            </motion.button>
+          </motion.div>
+
+          {/* Link Info Card */}
+          <motion.div
+            className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl shadow-xl p-6 mb-8"
+            variants={itemVariants}
+            whileHover={{ scale: 1.01 }}
+            transition={{ type: "spring", stiffness: 300 }}
+          >
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <h1 className="text-2xl font-bold text-white mb-3 flex items-center">
+                  <BarChart3 size={28} className="mr-3 text-blue-400" />
+                  {link.title || link.shortCode}
+                </h1>
+                <div className="space-y-2 text-sm text-gray-300">
+                  <div className="flex items-center">
+                    <span className="text-gray-400 w-24">Short URL:</span>
+                    <span className="font-medium text-blue-400 bg-blue-900/30 px-3 py-1 rounded-full border border-blue-700/50">
+                      {shortUrl}
+                    </span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-gray-400 w-24">Original:</span>
+                    <span className="font-medium text-gray-200 truncate">{link.originalUrl}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-gray-400 w-24">Created:</span>
+                    <span className="text-gray-300">{new Date(link.createdAt).toLocaleDateString()}</span>
+                  </div>
+                </div>
+              </div>
+
+              <motion.div
+                className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl flex items-center justify-center"
+                whileHover={{ rotate: 5, scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                <BarChart3 size={24} className="text-white" />
+              </motion.div>
             </div>
-          </div>
+          </motion.div>
 
           {analytics && (
             <>
               {/* Stats Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-                <div className="bg-white rounded-lg shadow p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-gray-600">Total Clicks</p>
-                      <p className="text-2xl font-bold text-gray-900">{analytics.totalClicks}</p>
-                    </div>
-                    <Eye className="text-blue-500" size={24} />
-                  </div>
-                </div>
+              <motion.div
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
+                variants={containerVariants}
+              >
+                {statCards.map((card, index) => (
+                  <motion.div
+                    key={card.title}
+                    className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl shadow-xl p-6 relative overflow-hidden group"
+                    variants={itemVariants}
+                    whileHover={{
+                      scale: 1.02,
+                      boxShadow: "0 20px 40px rgba(0,0,0,0.3)"
+                    }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    {/* Gradient overlay on hover */}
+                    <motion.div
+                      className={`absolute inset-0 bg-gradient-to-br ${card.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}
+                      initial={false}
+                    />
 
-                <div className="bg-white rounded-lg shadow p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-gray-600">Last 7 Days</p>
-                      <p className="text-2xl font-bold text-gray-900">{analytics.recentClicks}</p>
-                    </div>
-                    <Calendar className="text-green-500" size={24} />
-                  </div>
-                </div>
+                    <div className="flex items-center justify-between relative z-10">
+                      <div>
+                        <p className="text-sm font-medium text-gray-400 mb-1">{card.title}</p>
+                        <motion.p
+                          className="text-2xl font-bold text-white"
+                          initial={{ scale: 0.8, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          transition={{ duration: 0.5, delay: index * 0.1 + 0.3 }}
+                        >
+                          {card.value.toLocaleString()}
+                        </motion.p>
+                      </div>
 
-                <div className="bg-white rounded-lg shadow p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-gray-600">Countries</p>
-                      <p className="text-2xl font-bold text-gray-900">
-                        {Object.keys(analytics.countryStats).length}
-                      </p>
+                      <motion.div
+                        className={`w-12 h-12 bg-gradient-to-br ${card.gradient} rounded-lg flex items-center justify-center shadow-lg`}
+                        whileHover={{ rotate: 5, scale: 1.1 }}
+                        transition={{ type: "spring", stiffness: 300 }}
+                      >
+                        <card.icon size={24} className="text-white" />
+                      </motion.div>
                     </div>
-                    <Globe className="text-purple-500" size={24} />
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-lg shadow p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-gray-600">Unique Visitors</p>
-                      <p className="text-2xl font-bold text-gray-900">{analytics.recentAnalytics.length}</p>
-                    </div>
-                    <Users className="text-orange-500" size={24} />
-                  </div>
-                </div>
-              </div>
+                  </motion.div>
+                ))}
+              </motion.div>
 
               {/* Charts */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+              <motion.div
+                className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8"
+                variants={containerVariants}
+              >
                 {/* Daily Stats */}
-                <div className="bg-white rounded-lg shadow p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Daily Clicks (Last 30 Days)</h3>
-                  <div className="space-y-2">
+                <motion.div
+                  className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl shadow-xl p-6"
+                  variants={itemVariants}
+                  whileHover={{ scale: 1.01 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <h3 className="text-lg font-semibold text-white mb-6 flex items-center">
+                    <Calendar size={20} className="mr-2 text-blue-400" />
+                    Daily Clicks (Last 30 Days)
+                  </h3>
+                  <div className="space-y-3">
                     {Object.entries(analytics.dailyStats)
                       .sort(([a], [b]) => b.localeCompare(a))
                       .slice(0, 10)
-                      .map(([date, clicks]) => (
-                        <div key={date} className="flex items-center justify-between">
-                          <span className="text-sm text-gray-600">{new Date(date).toLocaleDateString()}</span>
-                          <div className="flex items-center space-x-2">
-                            <div className="w-24 bg-gray-200 rounded-full h-2">
-                              <div
-                                className="bg-blue-500 h-2 rounded-full"
-                                style={{ width: `${(clicks / Math.max(...Object.values(analytics.dailyStats))) * 100}%` }}
+                      .map(([date, clicks], index) => (
+                        <motion.div
+                          key={date}
+                          className="flex items-center justify-between"
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: index * 0.05 + 0.5 }}
+                        >
+                          <span className="text-sm text-gray-300">{new Date(date).toLocaleDateString()}</span>
+                          <div className="flex items-center space-x-3">
+                            <div className="w-24 bg-gray-700 rounded-full h-2 overflow-hidden">
+                              <motion.div
+                                className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full"
+                                initial={{ width: 0 }}
+                                animate={{
+                                  width: `${(clicks / Math.max(...Object.values(analytics.dailyStats))) * 100}%`
+                                }}
+                                transition={{ duration: 1, delay: index * 0.1 + 0.7 }}
                               />
                             </div>
-                            <span className="text-sm font-medium text-gray-900">{clicks}</span>
+                            <span className="text-sm font-medium text-white">{clicks}</span>
                           </div>
-                        </div>
+                        </motion.div>
                       ))}
                   </div>
-                </div>
+                </motion.div>
 
                 {/* Country Stats */}
-                <div className="bg-white rounded-lg shadow p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Top Countries</h3>
-                  <div className="space-y-2">
+                <motion.div
+                  className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl shadow-xl p-6"
+                  variants={itemVariants}
+                  whileHover={{ scale: 1.01 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <h3 className="text-lg font-semibold text-white mb-6 flex items-center">
+                    <Globe size={20} className="mr-2 text-green-400" />
+                    Top Countries
+                  </h3>
+                  <div className="space-y-3">
                     {Object.entries(analytics.countryStats)
                       .sort(([, a], [, b]) => b - a)
                       .slice(0, 10)
-                      .map(([country, clicks]) => (
-                        <div key={country} className="flex items-center justify-between">
-                          <span className="text-sm text-gray-600">{country}</span>
-                          <div className="flex items-center space-x-2">
-                            <div className="w-24 bg-gray-200 rounded-full h-2">
-                              <div
-                                className="bg-green-500 h-2 rounded-full"
-                                style={{ width: `${(clicks / Math.max(...Object.values(analytics.countryStats))) * 100}%` }}
+                      .map(([country, clicks], index) => (
+                        <motion.div
+                          key={country}
+                          className="flex items-center justify-between"
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: index * 0.05 + 0.5 }}
+                        >
+                          <span className="text-sm text-gray-300">{country}</span>
+                          <div className="flex items-center space-x-3">
+                            <div className="w-24 bg-gray-700 rounded-full h-2 overflow-hidden">
+                              <motion.div
+                                className="bg-gradient-to-r from-green-500 to-emerald-500 h-2 rounded-full"
+                                initial={{ width: 0 }}
+                                animate={{
+                                  width: `${(clicks / Math.max(...Object.values(analytics.countryStats))) * 100}%`
+                                }}
+                                transition={{ duration: 1, delay: index * 0.1 + 0.7 }}
                               />
                             </div>
-                            <span className="text-sm font-medium text-gray-900">{clicks}</span>
+                            <span className="text-sm font-medium text-white">{clicks}</span>
                           </div>
-                        </div>
+                        </motion.div>
                       ))}
                   </div>
-                </div>
-              </div>
+                </motion.div>
+              </motion.div>
 
               {/* Recent Activity */}
-              <div className="bg-white rounded-lg shadow p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
-                <div className="space-y-3">
+              <motion.div
+                className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl shadow-xl p-6"
+                variants={itemVariants}
+                whileHover={{ scale: 1.01 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                <h3 className="text-lg font-semibold text-white mb-6 flex items-center">
+                  <Activity size={20} className="mr-2 text-purple-400" />
+                  Recent Activity
+                </h3>
+                <div className="space-y-3 max-h-96 overflow-y-auto">
                   {analytics.recentAnalytics.map((activity, index) => (
-                    <div key={index} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-0">
+                    <motion.div
+                      key={index}
+                      className="flex items-center justify-between py-3 px-3 rounded-lg hover:bg-gray-700/20 transition-colors border-b border-gray-700/50 last:border-0"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.05 + 0.6 }}
+                    >
                       <div className="flex items-center space-x-3">
-                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                        <span className="text-sm text-gray-600">
-                          {new Date(activity.clickedAt).toLocaleString()}
+                        <motion.div
+                          className="w-2 h-2 bg-blue-400 rounded-full"
+                          animate={{ scale: [1, 1.2, 1] }}
+                          transition={{ repeat: Infinity, duration: 2, delay: index * 0.2 }}
+                        />
+                        <div>
+                          <span className="text-sm text-gray-300">
+                            {new Date(activity.clickedAt).toLocaleString()}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-4 text-sm text-gray-400">
+                        <div className="flex items-center space-x-2">
+                          <Globe size={14} className="text-green-400" />
+                          <span className="bg-gray-700/50 px-2 py-1 rounded text-xs">
+                            {activity.country || 'Unknown'}
+                          </span>
+                        </div>
+                        <span className="bg-gray-700/50 px-2 py-1 rounded text-xs">
+                          {activity.referer ? new URL(activity.referer).hostname : 'Direct'}
                         </span>
                       </div>
-                      <div className="flex items-center space-x-4 text-sm text-gray-500">
-                        <span>{activity.country || 'Unknown'}</span>
-                        <span>{activity.referer ? new URL(activity.referer).hostname : 'Direct'}</span>
-                      </div>
-                    </div>
+                    </motion.div>
                   ))}
+
+                  {analytics.recentAnalytics.length === 0 && (
+                    <motion.div
+                      className="text-center py-8"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.5 }}
+                    >
+                      <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-violet-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Activity size={24} className="text-white" />
+                      </div>
+                      <p className="text-gray-400">No recent activity</p>
+                      <p className="text-gray-500 text-sm mt-1">Activity will appear here when people click your link</p>
+                    </motion.div>
+                  )}
                 </div>
-              </div>
+              </motion.div>
             </>
           )}
-        </div>
+        </motion.div>
       </div>
     </div>
   );
