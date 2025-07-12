@@ -17,10 +17,13 @@ export default async function AnalyticsPage({ params }: Props) {
     redirect('/auth/signin');
   }
 
+  const awaitedParams = await params;
+  const { id } = awaitedParams;
+
   const link = await prisma.link.findFirst({
     where: {
-      id: params.id,
-      userId: session.user.id,
+      id,
+      userId: (session.user as { id: string }).id,
     },
     include: {
       domain: true,

@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { useState } from 'react';
 import { Copy, ExternalLink, Eye, Trash2, Calendar, Shield } from 'lucide-react';
 
 interface Link {
+  password: any;
   id: string;
   shortCode: string;
   originalUrl: string;
@@ -88,10 +90,12 @@ export function LinksList({ links, loading, onLinkDeleted }: LinksListProps) {
                     {link.title || link.shortCode}
                   </h3>
                   {link.expiresAt && (
-                    <Calendar size={16} className="text-orange-500" title="Has expiration date" />
+                    <Calendar size={16} className="text-orange-500" />
                   )}
                   {link.password && (
-                    <Shield size={16} className="text-blue-500" title="Password protected" />
+                    <span title="Password protected">
+                      <Shield size={16} className="text-blue-500" />
+                    </span>
                   )}
                 </div>
 

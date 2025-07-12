@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -44,7 +45,7 @@ export function AnalyticsView({ link }: { link: Link }) {
 
   const shortUrl = link.domain
     ? `https://${link.domain.domain}/${link.shortCode}`
-    : `${window.location.origin}/${link.shortCode}`;
+    : `${typeof window !== 'undefined' ? window.location.origin : ''}/${link.shortCode}`;
 
   if (loading) {
     return (

@@ -7,16 +7,21 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  // Await params before using
+  const awaitedParams = await params;
+  const { id } = awaitedParams;
+
   try {
     const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const userId = (session?.user as { id?: string })?.id;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const link = await prisma.link.findFirst({
       where: {
-        id: params.id,
-        userId: session.user.id,
+        id,
+        userId: userId,
       },
     });
 
@@ -25,7 +30,7 @@ export async function DELETE(
     }
 
     await prisma.link.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return NextResponse.json({ message: 'Link deleted successfully' });

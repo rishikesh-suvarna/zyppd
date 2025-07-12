@@ -1,6 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
-import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { nanoid } from 'nanoid';
 import bcrypt from 'bcryptjs';
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           error: 'Invalid input data',
-          details: validationResult.error.errors
+          details: validationResult.error.issues
         },
         { status: 400 }
       );
@@ -129,7 +129,7 @@ export async function POST(request: NextRequest) {
     console.error('Error creating link:', error);
 
     // Handle specific Prisma errors
-    if (error.code === 'P2002') {
+    if (typeof error === 'object' && error !== null && 'code' in error && (error as any).code === 'P2002') {
       return NextResponse.json(
         { error: 'Short code already exists. Please try again.' },
         { status: 400 }

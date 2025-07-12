@@ -8,6 +8,7 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const { id } = await params;
   try {
     const session = await getServerSession(authOptions);
     const userId = (session?.user as { id?: string })?.id;
@@ -17,7 +18,7 @@ export async function GET(
 
     const link = await prisma.link.findFirst({
       where: {
-        id: params.id,
+        id: id,
         userId: userId,
       },
     });
@@ -28,14 +29,14 @@ export async function GET(
 
     const [analytics, totalClicks, recentClicks] = await Promise.all([
       prisma.analytics.findMany({
-        where: { linkId: params.id },
+        where: { linkId: id },
         orderBy: { clickedAt: 'desc' },
         take: 100,
       }),
-      prisma.analytics.count({ where: { linkId: params.id } }),
+      prisma.analytics.count({ where: { linkId: id } }),
       prisma.analytics.count({
         where: {
-          linkId: params.id,
+          linkId: id,
           clickedAt: {
             gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // Last 7 days
           },

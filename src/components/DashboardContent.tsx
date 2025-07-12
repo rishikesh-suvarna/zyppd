@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -7,6 +8,7 @@ import { LinksList } from '@/components/LinksList';
 import { AnalyticsCard } from '@/components/AnalyticsCard';
 
 interface Link {
+  password: any;
   id: string;
   shortCode: string;
   originalUrl: string;
