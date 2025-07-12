@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
@@ -29,7 +30,7 @@ export function AnalyticsView({ link }: { link: Link }) {
 
   useEffect(() => {
     fetchAnalytics();
-  }, [link.id]);
+  }, []);
 
   const fetchAnalytics = async () => {
     try {

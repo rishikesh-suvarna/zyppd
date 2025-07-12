@@ -4,6 +4,7 @@ import { useSession, signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { Link2, User, LogOut, BarChart3 } from 'lucide-react';
 import { useState } from 'react';
+import Image from 'next/image';
 
 export function Navigation() {
   const { data: session } = useSession();
@@ -45,9 +46,11 @@ export function Navigation() {
                     className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors"
                   >
                     {session.user?.image ? (
-                      <img
+                      <Image
                         src={session.user.image}
                         alt={session.user.name || ''}
+                        width={32}
+                        height={32}
                         className="w-8 h-8 rounded-full"
                       />
                     ) : (

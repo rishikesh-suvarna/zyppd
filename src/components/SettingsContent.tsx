@@ -15,6 +15,7 @@ import {
   Check,
   X
 } from 'lucide-react';
+import Image from 'next/image';
 
 interface UserData {
   id: string;
@@ -243,9 +244,11 @@ export function SettingsContent() {
                   <form action={updateProfile} className="space-y-6">
                     <div className="flex items-center space-x-6">
                       {session?.user?.image ? (
-                        <img
+                        <Image
                           src={session.user.image}
                           alt={session.user.name || ''}
+                          width={64}
+                          height={64}
                           className="w-16 h-16 rounded-full"
                         />
                       ) : (
