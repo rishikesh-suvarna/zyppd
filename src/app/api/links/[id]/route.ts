@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { revalidatePath } from 'next/cache';
 
 export async function DELETE(
   request: NextRequest,
@@ -31,6 +32,8 @@ export async function DELETE(
     await prisma.link.delete({
       where: { id },
     });
+
+    revalidatePath('/dashboard');
 
     return NextResponse.json({ message: 'Link deleted successfully' });
   } catch (error) {

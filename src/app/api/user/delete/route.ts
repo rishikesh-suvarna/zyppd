@@ -1,8 +1,8 @@
-
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { revalidatePath } from 'next/cache';
 
 export async function DELETE() {
   try {
@@ -19,6 +19,9 @@ export async function DELETE() {
     await prisma.user.delete({
       where: { id: session.user.id }
     });
+
+    revalidatePath('/dashboard');
+    revalidatePath('/');
 
     return NextResponse.json({ message: 'Account deleted successfully' });
   } catch (error) {

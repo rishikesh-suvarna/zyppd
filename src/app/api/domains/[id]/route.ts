@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { revalidatePath } from 'next/cache';
 
 export async function DELETE(
   request: Request,
@@ -50,6 +51,9 @@ export async function DELETE(
     await prisma.domain.delete({
       where: { id: id }
     });
+
+    revalidatePath('/dashboard');
+    revalidatePath('/dashboard/settings');
 
     return NextResponse.json({ message: 'Domain deleted successfully' });
   } catch (error) {
