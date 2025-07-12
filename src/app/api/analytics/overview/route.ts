@@ -34,7 +34,14 @@ export async function GET() {
           select: { analytics: true }
         }
       }
-    });
+    }) as Array<{
+      id: string;
+      shortCode: string;
+      title: string;
+      originalUrl: string;
+      isActive: boolean;
+      _count: { analytics: number };
+    }>;
 
     // Calculate date ranges
     const now = new Date();
@@ -76,7 +83,7 @@ export async function GET() {
 
     // Get top performing links
     const topLinks = userLinks
-      .map(link => ({
+      .map((link) => ({
         id: link.id,
         shortCode: link.shortCode,
         title: link.title,
