@@ -115,24 +115,24 @@ export function DashboardContent() {
               <AnalyticsCard
                 title="Total Links"
                 value={links.length}
-                icon={<LinkIcon size={24} className="text-blue-400" />}
-                bgGradient="from-blue-500 to-cyan-500"
+                icon={<LinkIcon size={24} className="text-black" />}
+                bgGradient="bg-white"
               />
             </motion.div>
             <motion.div variants={itemVariants}>
               <AnalyticsCard
                 title="Total Clicks"
                 value={totalClicks}
-                icon={<TrendingUp size={24} className="text-green-400" />}
-                bgGradient="from-green-500 to-emerald-500"
+                icon={<TrendingUp size={24} className="text-black" />}
+                bgGradient="bg-white"
               />
             </motion.div>
             <motion.div variants={itemVariants}>
               <AnalyticsCard
                 title="Active Links"
                 value={links.filter(link => link.isActive).length}
-                icon={<Activity size={24} className="text-purple-400" />}
-                bgGradient="from-purple-500 to-violet-500"
+                icon={<Activity size={24} className="text-black" />}
+                bgGradient="bg-white"
               />
             </motion.div>
           </motion.div>
@@ -141,7 +141,7 @@ export function DashboardContent() {
           <motion.div className="mb-8" variants={itemVariants}>
             <motion.button
               onClick={() => setShowCreateForm(true)}
-              className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl flex items-center group"
+              className="bg-white text-black px-6 py-3 rounded-lg transition-all duration-200 font-semibold shadow-lg hover:shadow-xl flex items-center group"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >

@@ -104,7 +104,7 @@ export function LinksList({ links, loading, onLinkDeleted }: LinksListProps) {
         transition={{ duration: 0.5 }}
       >
         <motion.div
-          className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4"
+          className="w-16 h-16 bg-black rounded-full flex items-center justify-center mx-auto mb-4"
           animate={{ rotate: [0, 10, -10, 0] }}
           transition={{ repeat: Infinity, duration: 2 }}
         >
@@ -118,7 +118,7 @@ export function LinksList({ links, loading, onLinkDeleted }: LinksListProps) {
 
   return (
     <motion.div
-      className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl shadow-xl overflow-hidden"
+      className="bg-black/70 backdrop-blur-sm border border-gray-700 rounded-xl shadow-xl overflow-hidden"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -126,7 +126,7 @@ export function LinksList({ links, loading, onLinkDeleted }: LinksListProps) {
       <div className="px-6 py-4 border-b border-gray-700 bg-gray-800/30">
         <h2 className="text-lg font-semibold text-white flex items-center">
           <motion.div
-            className="w-2 h-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mr-3"
+            className="w-2 h-2 bg-black rounded-full mr-3"
             animate={{ scale: [1, 1.2, 1] }}
             transition={{ repeat: Infinity, duration: 2 }}
           />
@@ -144,7 +144,7 @@ export function LinksList({ links, loading, onLinkDeleted }: LinksListProps) {
           {links.map((link) => (
             <motion.div
               key={link.id}
-              className="p-6 hover:bg-gray-700/30 transition-all duration-200 group"
+              className="p-6 hover:bg-black transition-all duration-200 group"
               variants={itemVariants}
               layout
               exit={{ opacity: 0, x: -100, transition: { duration: 0.3 } }}
@@ -194,7 +194,7 @@ export function LinksList({ links, loading, onLinkDeleted }: LinksListProps) {
                   <div className="space-y-2">
                     <div className="flex items-center space-x-2">
                       <motion.span
-                        className="text-sm font-medium text-blue-400 bg-blue-900/30 px-3 py-1 rounded-full border border-blue-700/50"
+                        className="text-sm font-medium text-blue-400 bg-black px-3 py-1 rounded-full border border-blue-700/50"
                         whileHover={{ scale: 1.02, backgroundColor: "rgba(59, 130, 246, 0.2)" }}
                       >
                         {link.shortUrl}

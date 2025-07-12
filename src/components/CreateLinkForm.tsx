@@ -29,13 +29,13 @@ export function CreateLinkForm({ onSubmit, onCancel }: CreateLinkFormProps) {
     return (
       <AnimatePresence>
         <motion.div
-          className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+          className="fixed inset-0 bg-black backdrop-blur-sm flex items-center justify-center p-4 z-50"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
           <motion.div
-            className="bg-gray-800 rounded-xl shadow-2xl p-8 border border-gray-700"
+            className="bg-black rounded-xl shadow-2xl p-8 border border-gray-700"
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
@@ -55,13 +55,13 @@ export function CreateLinkForm({ onSubmit, onCancel }: CreateLinkFormProps) {
     return (
       <AnimatePresence>
         <motion.div
-          className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+          className="fixed inset-0 bg-black backdrop-blur-sm flex items-center justify-center p-4 z-50"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
           <motion.div
-            className="bg-gray-800 rounded-xl shadow-2xl max-w-md w-full p-6 border border-gray-700"
+            className="bg-black rounded-xl shadow-2xl max-w-md w-full p-6 border border-gray-700"
             initial={{ scale: 0.9, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.9, opacity: 0, y: 20 }}
@@ -70,7 +70,7 @@ export function CreateLinkForm({ onSubmit, onCancel }: CreateLinkFormProps) {
             <p className="text-gray-300 mb-4">Please sign in to create links.</p>
             <button
               onClick={onCancel}
-              className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+              className="w-full bg-black text-white py-2 px-4 rounded-lg transition-colors"
             >
               Close
             </button>
@@ -163,7 +163,7 @@ export function CreateLinkForm({ onSubmit, onCancel }: CreateLinkFormProps) {
         onClick={(e) => e.target === e.currentTarget && onCancel()}
       >
         <motion.div
-          className="bg-gray-800 rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto border border-gray-700"
+          className="bg-black rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto border border-gray-700"
           variants={formVariants}
           initial="hidden"
           animate="visible"
@@ -175,7 +175,7 @@ export function CreateLinkForm({ onSubmit, onCancel }: CreateLinkFormProps) {
               variants={itemVariants}
             >
               <h2 className="text-xl font-bold text-white flex items-center">
-                <Link size={20} className="mr-2 text-blue-400" />
+                <Link size={20} className="mr-2 text-white" />
                 Create New Link
               </h2>
               <motion.button
@@ -190,8 +190,8 @@ export function CreateLinkForm({ onSubmit, onCancel }: CreateLinkFormProps) {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <motion.div variants={itemVariants}>
-                <label className="block text-sm font-medium text-gray-300 mb-2 flex items-center">
-                  <Link size={16} className="mr-2 text-blue-400" />
+                <label className="text-sm font-medium text-gray-300 mb-2 flex items-center">
+                  <Link size={16} className="mr-2 text-white" />
                   Original URL *
                 </label>
                 <input
@@ -199,7 +199,7 @@ export function CreateLinkForm({ onSubmit, onCancel }: CreateLinkFormProps) {
                   placeholder="https://example.com"
                   value={formData.originalUrl}
                   onChange={(e) => setFormData(prev => ({ ...prev, originalUrl: e.target.value }))}
-                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 transition-all"
+                  className="w-full px-4 py-3 bg-black border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 transition-all"
                   required
                 />
               </motion.div>
@@ -213,7 +213,7 @@ export function CreateLinkForm({ onSubmit, onCancel }: CreateLinkFormProps) {
                   placeholder="my-link"
                   value={formData.shortCode}
                   onChange={(e) => setFormData(prev => ({ ...prev, shortCode: e.target.value }))}
-                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 transition-all"
+                  className="w-full px-4 py-3 bg-black border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 transition-all"
                 />
                 <p className="text-xs text-gray-400 mt-1">
                   Leave empty to generate automatically
@@ -221,8 +221,8 @@ export function CreateLinkForm({ onSubmit, onCancel }: CreateLinkFormProps) {
               </motion.div>
 
               <motion.div variants={itemVariants}>
-                <label className="block text-sm font-medium text-gray-300 mb-2 flex items-center">
-                  <FileText size={16} className="mr-2 text-green-400" />
+                <label className="text-sm font-medium text-gray-300 mb-2 flex items-center">
+                  <FileText size={16} className="mr-2 text-white" />
                   Title (optional)
                 </label>
                 <input
@@ -230,7 +230,7 @@ export function CreateLinkForm({ onSubmit, onCancel }: CreateLinkFormProps) {
                   placeholder="My Link"
                   value={formData.title}
                   onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 transition-all"
+                  className="w-full px-4 py-3 bg-black border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 transition-all"
                 />
               </motion.div>
 
@@ -242,14 +242,14 @@ export function CreateLinkForm({ onSubmit, onCancel }: CreateLinkFormProps) {
                   placeholder="Brief description of your link"
                   value={formData.description}
                   onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 transition-all resize-none"
+                  className="w-full px-4 py-3 bg-black border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 transition-all resize-none"
                   rows={3}
                 />
               </motion.div>
 
               <motion.div variants={itemVariants}>
-                <label className="block text-sm font-medium text-gray-300 mb-2 flex items-center">
-                  <Lock size={16} className="mr-2 text-purple-400" />
+                <label className="text-sm font-medium text-gray-300 mb-2 flex items-center">
+                  <Lock size={16} className="mr-2 text-white" />
                   Password Protection (optional)
                 </label>
                 <input
@@ -257,20 +257,20 @@ export function CreateLinkForm({ onSubmit, onCancel }: CreateLinkFormProps) {
                   placeholder="Enter password"
                   value={formData.password}
                   onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
-                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 transition-all"
+                  className="w-full px-4 py-3 bg-black border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 transition-all"
                 />
               </motion.div>
 
               <motion.div variants={itemVariants}>
-                <label className="block text-sm font-medium text-gray-300 mb-2 flex items-center">
-                  <Calendar size={16} className="mr-2 text-orange-400" />
+                <label className="text-sm font-medium text-gray-300 mb-2 flex items-center">
+                  <Calendar size={16} className="mr-2 text-white" />
                   Expiration Date (optional)
                 </label>
                 <input
                   type="datetime-local"
                   value={formData.expiresAt}
                   onChange={(e) => setFormData(prev => ({ ...prev, expiresAt: e.target.value }))}
-                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white transition-all"
+                  className="w-full px-4 py-3 bg-black border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white transition-all"
                 />
               </motion.div>
 
@@ -291,7 +291,7 @@ export function CreateLinkForm({ onSubmit, onCancel }: CreateLinkFormProps) {
                 <motion.button
                   type="submit"
                   disabled={loading}
-                  className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-lg hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium"
+                  className="flex-1 bg-white text-black py-3 px-4 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium"
                   whileHover={{ scale: loading ? 1 : 1.02 }}
                   whileTap={{ scale: loading ? 1 : 0.98 }}
                 >

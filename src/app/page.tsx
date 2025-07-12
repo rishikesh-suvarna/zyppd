@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Link2, BarChart3, Shield, Clock, Globe, Zap, ArrowRight, Sparkles, Star, Users, CheckCircle } from 'lucide-react';
+import { Link2, BarChart3, Shield, Clock, Globe, Zap, ArrowRight, Sparkles, Star, CheckCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function HomePage() {
@@ -93,30 +93,6 @@ export default function HomePage() {
     { number: "99.9%", label: "Uptime" }
   ];
 
-  const testimonials = [
-    {
-      name: "Sarah Chen",
-      role: "Marketing Director",
-      company: "TechFlow",
-      content: "Zyppd has revolutionized our link management. The analytics are incredible!",
-      avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=64&h=64&fit=crop&crop=face"
-    },
-    {
-      name: "Marcus Johnson",
-      role: "Growth Lead",
-      company: "StartupXYZ",
-      content: "Custom domains and password protection are game-changers for our campaigns.",
-      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=64&h=64&fit=crop&crop=face"
-    },
-    {
-      name: "Emily Rodriguez",
-      role: "Content Manager",
-      company: "CreativeAgency",
-      content: "The best URL shortener we've used. Clean, fast, and feature-rich.",
-      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=64&h=64&fit=crop&crop=face"
-    }
-  ];
-
   return (
     <div className="min-h-screen bg-black overflow-hidden">
       {/* Hero Section */}
@@ -169,7 +145,7 @@ export default function HomePage() {
           >
             Professional URL
             <motion.span
-              className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400"
+              className="text-white"
               animate={{
                 backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
               }}
@@ -193,7 +169,7 @@ export default function HomePage() {
           </motion.p>
 
           <motion.div
-            className="flex flex-col sm:flex-row gap-4 justify-center mb-16"
+            className="flex flex-col sm:flex-row gap-4 justify-center mb-16 items-center"
             variants={itemVariants}
           >
             <motion.div
@@ -202,7 +178,7 @@ export default function HomePage() {
             >
               <Link
                 href="/auth/signin"
-                className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl inline-flex items-center group text-lg"
+                className="bg-white text-black px-8 py-4 rounded-xl transition-all duration-200 font-semibold shadow-lg hover:shadow-xl inline-flex items-center group text-lg"
               >
                 Get Started Free
                 <ArrowRight size={20} className="ml-2 group-hover:translate-x-1 transition-transform" />
@@ -337,157 +313,6 @@ export default function HomePage() {
             </motion.div>
           ))}
         </motion.div>
-      </motion.div>
-
-      {/* Testimonials */}
-      <motion.div
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        variants={containerVariants}
-      >
-        <motion.div className="text-center mb-16" variants={itemVariants}>
-          <motion.div
-            className="inline-flex items-center px-4 py-2 bg-green-900/20 rounded-full border border-green-700/50 mb-6"
-            whileHover={{ scale: 1.05 }}
-          >
-            <Users size={16} className="text-green-400 mr-2" />
-            <span className="text-green-300 text-sm">Loved by Teams</span>
-          </motion.div>
-          <h2 className="text-4xl font-bold text-white mb-4">
-            Trusted by professionals worldwide
-          </h2>
-          <p className="text-xl text-gray-300">
-            See what our users have to say about Zyppd
-          </p>
-        </motion.div>
-
-        <motion.div
-          className="grid grid-cols-1 md:grid-cols-3 gap-8"
-          variants={containerVariants}
-        >
-          {testimonials.map((testimonial) => (
-            <motion.div
-              key={testimonial.name}
-              className="bg-gray-800/30 backdrop-blur-sm border border-gray-700 rounded-xl p-6 hover:bg-gray-800/50 transition-all duration-300"
-              variants={itemVariants}
-              whileHover={{ scale: 1.02, y: -5 }}
-            >
-              <div className="flex mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={16} className="text-yellow-400 fill-current" />
-                ))}
-              </div>
-              <p className="text-gray-300 mb-6 italic">&quot;{testimonial.content}&quot;</p>
-              <div className="flex items-center">
-                <motion.img
-                  src={testimonial.avatar}
-                  alt={testimonial.name}
-                  className="w-12 h-12 rounded-full mr-4"
-                  whileHover={{ scale: 1.1 }}
-                />
-                <div>
-                  <div className="text-white font-medium">{testimonial.name}</div>
-                  <div className="text-gray-400 text-sm">{testimonial.role} at {testimonial.company}</div>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-      </motion.div>
-
-      {/* CTA Section */}
-      <motion.div
-        className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 text-white py-20 overflow-hidden"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        variants={containerVariants}
-        style={{ backgroundSize: "200% 200%" }}
-        animate={{
-          backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-        }}
-        transition={{
-          duration: 10,
-          repeat: Infinity,
-          ease: "linear"
-        }}
-      >
-        {/* Animated background elements */}
-        <motion.div
-          className="absolute inset-0 opacity-20"
-          animate={{
-            background: [
-              "radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%)",
-              "radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%)",
-              "radial-gradient(circle at 40% 40%, rgba(255,255,255,0.1) 0%, transparent 50%)"
-            ]
-          }}
-          transition={{ duration: 6, repeat: Infinity }}
-        />
-
-        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.h2
-            className="text-4xl font-bold mb-4"
-            variants={itemVariants}
-          >
-            Ready to transform your links?
-          </motion.h2>
-          <motion.p
-            className="text-xl mb-8 opacity-90 max-w-2xl mx-auto"
-            variants={itemVariants}
-          >
-            Join thousands of professionals who trust Zyppd for their URL shortening needs.
-            Start free, upgrade when you&apos;re ready.
-          </motion.p>
-          <motion.div
-            variants={itemVariants}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Link
-              href="/auth/signin"
-              className="bg-white text-blue-600 px-8 py-4 rounded-xl hover:bg-gray-100 transition-colors font-semibold inline-flex items-center shadow-lg hover:shadow-xl group text-lg"
-            >
-              Start Free Today
-              <motion.div
-                className="ml-2"
-                animate={{ x: [0, 5, 0] }}
-                transition={{ repeat: Infinity, duration: 1.5 }}
-              >
-                <ArrowRight size={20} />
-              </motion.div>
-            </Link>
-          </motion.div>
-        </div>
-
-        {/* Floating elements */}
-        <motion.div
-          className="absolute top-1/4 left-1/4 w-4 h-4 bg-white/20 rounded-full"
-          animate={{
-            y: [0, -20, 0],
-            opacity: [0.3, 0.7, 0.3]
-          }}
-          transition={{
-            repeat: Infinity,
-            duration: 3,
-            ease: "easeInOut"
-          }}
-        />
-        <motion.div
-          className="absolute bottom-1/4 right-1/4 w-6 h-6 bg-white/10 rounded-full"
-          animate={{
-            y: [0, 20, 0],
-            opacity: [0.2, 0.5, 0.2]
-          }}
-          transition={{
-            repeat: Infinity,
-            duration: 4,
-            ease: "easeInOut",
-            delay: 1
-          }}
-        />
       </motion.div>
     </div>
   );
