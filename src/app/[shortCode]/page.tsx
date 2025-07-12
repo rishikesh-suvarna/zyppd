@@ -1,20 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { headers } from 'next/headers';
 import bcrypt from 'bcryptjs';
 import { PasswordForm } from '@/components/PasswordForm';
 
-interface Props {
-  params: {
-    shortCode: string;
-  };
-  searchParams: {
-    password?: string;
-  };
-}
-
-export default async function RedirectPage({ params, searchParams }: Props) {
-  const { shortCode } = await params;
+export default async function RedirectPage({ params, searchParams }: any) {
+  const { shortCode } = params;
   const headersList = headers();
   const userAgent = (await headersList).get('user-agent') || '';
   const referer = (await headersList).get('referer') || '';
