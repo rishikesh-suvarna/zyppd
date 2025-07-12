@@ -1,11 +1,11 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Lato } from 'next/font/google';
 import { AuthProvider } from '@/components/AuthProvider';
 import { Navigation } from '@/components/Navigation';
 import { PageTransition } from '@/components/PageTransition';
 
-const inter = Inter({ subsets: ['latin'] });
+const lato = Lato({ subsets: ['latin'], weight: ['100', '300', '400', '700', '900'] });
 
 export const metadata: Metadata = {
   title: 'Zyppd - Professional URL Shortener',
@@ -19,7 +19,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={lato.className}>
         <AuthProvider>
           <Navigation />
           <PageTransition>
