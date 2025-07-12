@@ -1,36 +1,185 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🔗 Zypdd
 
-## Getting Started
+A modern, feature-rich URL shortener built with Next.js 14, offering custom domains, advanced analytics, and premium features for businesses and professionals.
 
-First, run the development server:
+## ✨ Features
 
+### 🆓 Free Tier
+- Create custom short links
+- Password protection for links
+- Link expiration dates
+- Basic analytics (clicks, countries, referrers)
+- Branded short links with zypdd.com domain
+
+### 👑 Premium Tier
+- Custom domains (use your own domain)
+- Advanced analytics with detailed charts
+- Unlimited links
+- API access
+- Priority support
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js 18+ 
+- PostgreSQL database
+- GitHub OAuth App (for authentication)
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/rishikesh-suvarna/zyppd.git
+   cd zypdd
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Setup environment variables**
+   ```bash
+   cp .env.example .env
+   ```
+   
+   Fill in your environment variables:
+   ```env
+   # Database
+   DATABASE_URL="postgresql://username:password@localhost:5432/zypdd"
+   
+   # NextAuth
+   NEXTAUTH_URL="http://localhost:3000"
+   NEXTAUTH_SECRET="your-secret-key"
+   
+   # GitHub OAuth
+   GOOGLE_CLIENT_ID="your-google-client-id"
+   GOOGLE_CLIENT_SECRET="your-google-client-secret"
+   
+   # App
+   NEXT_PUBLIC_BASE_URL="http://localhost:3000"
+   ```
+
+4. **Setup database**
+   ```bash
+   npx prisma generate
+   npx prisma db push
+   ```
+
+5. **Run the development server**
+   ```bash
+   npm run dev
+   ```
+
+6. **Open your browser**
+   Visit [http://localhost:3000](http://localhost:3000)
+
+## 🔧 Tech Stack
+
+- **Framework**: Next.js 14 (App Router)
+- **Database**: PostgreSQL with Prisma ORM
+- **Authentication**: NextAuth.js (GitHub, Google)
+- **Styling**: Tailwind CSS
+- **Icons**: Lucide React
+- **Language**: TypeScript
+
+## 📖 Usage
+
+### Creating Short Links
+
+1. Sign in with your GitHub or Google account
+2. Go to the Dashboard
+3. Click "Create New Link"
+4. Enter your URL and optional settings:
+   - Custom short code
+   - Password protection
+   - Expiration date
+   - Title and description
+
+### Analytics
+
+View detailed analytics for your links:
+- Click statistics over time
+- Geographic data (countries)
+- Referrer information
+- Device and browser data
+
+### Custom Domains (Premium)
+
+1. Upgrade to Premium
+2. Go to Settings → Custom Domains
+3. Add your domain
+4. Follow DNS setup instructions
+5. Use your domain for short links
+
+## 🛠️ API Reference
+
+### Authentication
+All API endpoints require authentication via NextAuth session.
+
+### Create Link
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+POST /api/links
+Content-Type: application/json
+
+{
+  "originalUrl": "https://example.com",
+  "shortCode": "my-link",
+  "title": "My Link",
+  "password": "secret123",
+  "expiresAt": "2024-12-31T23:59:59.000Z"
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Get Links
+```bash
+GET /api/links?page=1&limit=10&search=example
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Get Analytics
+```bash
+GET /api/links/{linkId}/analytics
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🔐 Environment Variables
 
-## Learn More
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `DATABASE_URL` | PostgreSQL connection string | ✅ |
+| `NEXTAUTH_URL` | Your app URL | ✅ |
+| `NEXTAUTH_SECRET` | NextAuth secret key | ✅ |
+| `GOOGLE_CLIENT_ID` | Google OAuth Client ID | ✅ |
+| `GOOGLE_CLIENT_SECRET` | Google OAuth Client Secret | ✅ |
+| `NEXT_PUBLIC_BASE_URL` | Public app URL | ✅ |
 
-To learn more about Next.js, take a look at the following resources:
+## 📁 Project Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+zypdd/
+├── app/                    # Next.js app directory
+│   ├── api/               # API routes
+│   ├── auth/              # Authentication pages
+│   ├── dashboard/         # Dashboard pages
+│   └── [shortCode]/       # Dynamic redirect pages
+├── components/            # React components
+├── lib/                   # Utility functions
+├── prisma/               # Database schema
+└── public/               # Static assets
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🤝 Contributing
 
-## Deploy on Vercel
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📝 License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🆘 Support
+
+- 📧 Email: rishikeshsuvarna@gmail.com
+- 🐛 Issues: [GitHub Issues](https://github.com/rishikesh-suvarna/zypdd/issues)
