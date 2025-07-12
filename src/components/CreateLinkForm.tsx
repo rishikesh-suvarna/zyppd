@@ -3,7 +3,8 @@
 
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
-import { X } from 'lucide-react';
+import { X, Link, Lock, Calendar, FileText } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface CreateLinkFormProps {
   onSubmit: (link: any) => void;
@@ -26,28 +27,56 @@ export function CreateLinkForm({ onSubmit, onCancel }: CreateLinkFormProps) {
   // Check if user is authenticated
   if (status === 'loading') {
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-        <div className="bg-white rounded-lg shadow-xl p-6">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-        </div>
-      </div>
+      <AnimatePresence>
+        <motion.div
+          className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <motion.div
+            className="bg-gray-800 rounded-xl shadow-2xl p-8 border border-gray-700"
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+          >
+            <motion.div
+              className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full mx-auto"
+              animate={{ rotate: 360 }}
+              transition={{ repeat: Infinity, duration: 1 }}
+            />
+          </motion.div>
+        </motion.div>
+      </AnimatePresence>
     );
   }
 
   if (status === 'unauthenticated') {
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-        <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Authentication Required</h2>
-          <p className="text-gray-600 mb-4">Please sign in to create links.</p>
-          <button
-            onClick={onCancel}
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700"
+      <AnimatePresence>
+        <motion.div
+          className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <motion.div
+            className="bg-gray-800 rounded-xl shadow-2xl max-w-md w-full p-6 border border-gray-700"
+            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.9, opacity: 0, y: 20 }}
           >
-            Close
-          </button>
-        </div>
-      </div>
+            <h2 className="text-xl font-bold text-white mb-4">Authentication Required</h2>
+            <p className="text-gray-300 mb-4">Please sign in to create links.</p>
+            <button
+              onClick={onCancel}
+              className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Close
+            </button>
+          </motion.div>
+        </motion.div>
+      </AnimatePresence>
     );
   }
 
@@ -68,9 +97,8 @@ export function CreateLinkForm({ onSubmit, onCancel }: CreateLinkFormProps) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          // The session cookie will be automatically included
         },
-        credentials: 'include', // This ensures cookies are sent
+        credentials: 'include',
         body: JSON.stringify({
           originalUrl: formData.originalUrl,
           shortCode: formData.shortCode || undefined,
@@ -106,127 +134,194 @@ export function CreateLinkForm({ onSubmit, onCancel }: CreateLinkFormProps) {
     }
   };
 
+  const formVariants = {
+    hidden: { opacity: 0, scale: 0.9, y: 20 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      transition: {
+        duration: 0.3,
+        staggerChildren: 0.05
+      }
+    },
+    exit: { opacity: 0, scale: 0.9, y: 20 }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 10 },
+    visible: { opacity: 1, y: 0 }
+  };
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-bold text-gray-900">Create New Link</h2>
-            <button
-              onClick={onCancel}
-              className="text-gray-400 hover:text-gray-600"
+    <AnimatePresence>
+      <motion.div
+        className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={(e) => e.target === e.currentTarget && onCancel()}
+      >
+        <motion.div
+          className="bg-gray-800 rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto border border-gray-700"
+          variants={formVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+        >
+          <div className="p-6">
+            <motion.div
+              className="flex justify-between items-center mb-6"
+              variants={itemVariants}
             >
-              <X size={20} />
-            </button>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Original URL *
-              </label>
-              <input
-                type="url"
-                placeholder="https://example.com"
-                value={formData.originalUrl}
-                onChange={(e) => setFormData(prev => ({ ...prev, originalUrl: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Custom Short Code (optional)
-              </label>
-              <input
-                type="text"
-                placeholder="my-link"
-                value={formData.shortCode}
-                onChange={(e) => setFormData(prev => ({ ...prev, shortCode: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                Leave empty to generate automatically
-              </p>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Title (optional)
-              </label>
-              <input
-                type="text"
-                placeholder="My Link"
-                value={formData.title}
-                onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Description (optional)
-              </label>
-              <textarea
-                placeholder="Brief description of your link"
-                value={formData.description}
-                onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                rows={3}
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Password Protection (optional)
-              </label>
-              <input
-                type="password"
-                placeholder="Enter password"
-                value={formData.password}
-                onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Expiration Date (optional)
-              </label>
-              <input
-                type="datetime-local"
-                value={formData.expiresAt}
-                onChange={(e) => setFormData(prev => ({ ...prev, expiresAt: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-
-            {error && (
-              <div className="bg-red-50 border border-red-200 rounded-md p-3">
-                <div className="text-red-800 text-sm">{error}</div>
-              </div>
-            )}
-
-            <div className="flex space-x-3 pt-4">
-              <button
-                type="submit"
-                disabled={loading}
-                className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? 'Creating...' : 'Create Link'}
-              </button>
-              <button
-                type="button"
+              <h2 className="text-xl font-bold text-white flex items-center">
+                <Link size={20} className="mr-2 text-blue-400" />
+                Create New Link
+              </h2>
+              <motion.button
                 onClick={onCancel}
-                className="flex-1 bg-gray-200 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-300"
+                className="text-gray-400 hover:text-white transition-colors"
+                whileHover={{ scale: 1.1, rotate: 90 }}
+                whileTap={{ scale: 0.9 }}
               >
-                Cancel
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
+                <X size={20} />
+              </motion.button>
+            </motion.div>
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <motion.div variants={itemVariants}>
+                <label className="block text-sm font-medium text-gray-300 mb-2 flex items-center">
+                  <Link size={16} className="mr-2 text-blue-400" />
+                  Original URL *
+                </label>
+                <input
+                  type="url"
+                  placeholder="https://example.com"
+                  value={formData.originalUrl}
+                  onChange={(e) => setFormData(prev => ({ ...prev, originalUrl: e.target.value }))}
+                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 transition-all"
+                  required
+                />
+              </motion.div>
+
+              <motion.div variants={itemVariants}>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Custom Short Code (optional)
+                </label>
+                <input
+                  type="text"
+                  placeholder="my-link"
+                  value={formData.shortCode}
+                  onChange={(e) => setFormData(prev => ({ ...prev, shortCode: e.target.value }))}
+                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 transition-all"
+                />
+                <p className="text-xs text-gray-400 mt-1">
+                  Leave empty to generate automatically
+                </p>
+              </motion.div>
+
+              <motion.div variants={itemVariants}>
+                <label className="block text-sm font-medium text-gray-300 mb-2 flex items-center">
+                  <FileText size={16} className="mr-2 text-green-400" />
+                  Title (optional)
+                </label>
+                <input
+                  type="text"
+                  placeholder="My Link"
+                  value={formData.title}
+                  onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 transition-all"
+                />
+              </motion.div>
+
+              <motion.div variants={itemVariants}>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Description (optional)
+                </label>
+                <textarea
+                  placeholder="Brief description of your link"
+                  value={formData.description}
+                  onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 transition-all resize-none"
+                  rows={3}
+                />
+              </motion.div>
+
+              <motion.div variants={itemVariants}>
+                <label className="block text-sm font-medium text-gray-300 mb-2 flex items-center">
+                  <Lock size={16} className="mr-2 text-purple-400" />
+                  Password Protection (optional)
+                </label>
+                <input
+                  type="password"
+                  placeholder="Enter password"
+                  value={formData.password}
+                  onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
+                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 transition-all"
+                />
+              </motion.div>
+
+              <motion.div variants={itemVariants}>
+                <label className="block text-sm font-medium text-gray-300 mb-2 flex items-center">
+                  <Calendar size={16} className="mr-2 text-orange-400" />
+                  Expiration Date (optional)
+                </label>
+                <input
+                  type="datetime-local"
+                  value={formData.expiresAt}
+                  onChange={(e) => setFormData(prev => ({ ...prev, expiresAt: e.target.value }))}
+                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white transition-all"
+                />
+              </motion.div>
+
+              {error && (
+                <motion.div
+                  className="bg-red-900/50 border border-red-700 rounded-lg p-4 backdrop-blur-sm"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                >
+                  <div className="text-red-200 text-sm">{error}</div>
+                </motion.div>
+              )}
+
+              <motion.div
+                className="flex space-x-3 pt-4"
+                variants={itemVariants}
+              >
+                <motion.button
+                  type="submit"
+                  disabled={loading}
+                  className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-lg hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium"
+                  whileHover={{ scale: loading ? 1 : 1.02 }}
+                  whileTap={{ scale: loading ? 1 : 0.98 }}
+                >
+                  {loading ? (
+                    <motion.div className="flex items-center justify-center">
+                      <motion.div
+                        className="w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2"
+                        animate={{ rotate: 360 }}
+                        transition={{ repeat: Infinity, duration: 1 }}
+                      />
+                      Creating...
+                    </motion.div>
+                  ) : (
+                    'Create Link'
+                  )}
+                </motion.button>
+                <motion.button
+                  type="button"
+                  onClick={onCancel}
+                  className="flex-1 bg-gray-700 text-gray-200 py-3 px-4 rounded-lg hover:bg-gray-600 transition-colors font-medium"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  Cancel
+                </motion.button>
+              </motion.div>
+            </form>
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   );
 }
