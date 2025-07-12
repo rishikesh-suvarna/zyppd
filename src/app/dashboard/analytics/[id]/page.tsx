@@ -33,6 +33,15 @@ export default async function AnalyticsPage({ params }: Props) {
   if (!link) {
     redirect('/dashboard');
   }
+  const fixedLink = link
+    ? {
+      ...link,
+      title: link.title === null ? undefined : link.title,
+      createdAt: link.createdAt.toISOString(),
+      updatedAt: link.updatedAt.toISOString(),
+      domain: link.domain ? { domain: link.domain.domain } : undefined,
+    }
+    : link;
 
-  return <AnalyticsView link={link} />;
+  return <AnalyticsView link={fixedLink} />;
 }
