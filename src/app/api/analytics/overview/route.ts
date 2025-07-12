@@ -132,7 +132,7 @@ export async function GET() {
 
     // Group by day
     const dailyStatsGrouped = dailyStats.reduce(
-      (acc: Record<string, number>, click) => {
+      (acc: Record<string, number>, click: { clickedAt: Date }) => {
         const day = click.clickedAt.toISOString().split('T')[0];
         acc[day] = (acc[day] || 0) + 1;
         return acc;
