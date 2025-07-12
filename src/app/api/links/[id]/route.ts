@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
@@ -5,11 +6,9 @@ import { prisma } from '@/lib/prisma';
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: any }
 ) {
-  // Await params before using
-  const awaitedParams = await params;
-  const { id } = awaitedParams;
+  const { id } = context.params;
 
   try {
     const session = await getServerSession(authOptions);

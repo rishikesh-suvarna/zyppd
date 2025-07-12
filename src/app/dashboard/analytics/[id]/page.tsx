@@ -1,24 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { AnalyticsView } from '@/components/AnalyticsView';
 
-interface Props {
-  params: {
-    id: string;
-  };
-}
-
-export default async function AnalyticsPage({ params }: Props) {
+export default async function AnalyticsPage({ params }: any) {
   const session = await getServerSession(authOptions);
 
   if (!session) {
     redirect('/auth/signin');
   }
 
-  const awaitedParams = await params;
-  const { id } = awaitedParams;
+  const { id } = params;
 
   const link = await prisma.link.findFirst({
     where: {

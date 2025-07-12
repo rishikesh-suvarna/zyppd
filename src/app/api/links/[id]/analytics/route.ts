@@ -1,14 +1,15 @@
-import { NextRequest, NextResponse } from 'next/server';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
 
 export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
+  request: Request,
+  context: { params: any }
 ) {
-  const { id } = await params;
+  const { id } = context.params;
   try {
     const session = await getServerSession(authOptions);
     const userId = (session?.user as { id?: string })?.id;
