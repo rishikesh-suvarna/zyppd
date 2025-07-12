@@ -23,7 +23,7 @@ A modern, feature-rich URL shortener built with Next.js 14, offering custom doma
 ### Prerequisites
 - Node.js 18+ 
 - PostgreSQL database
-- GitHub OAuth App (for authentication)
+- Google OAuth App (for authentication)
 
 ### Installation
 
@@ -52,7 +52,7 @@ A modern, feature-rich URL shortener built with Next.js 14, offering custom doma
    NEXTAUTH_URL="http://localhost:3000"
    NEXTAUTH_SECRET="your-secret-key"
    
-   # GitHub OAuth
+   # Google OAuth
    GOOGLE_CLIENT_ID="your-google-client-id"
    GOOGLE_CLIENT_SECRET="your-google-client-secret"
    
@@ -78,7 +78,7 @@ A modern, feature-rich URL shortener built with Next.js 14, offering custom doma
 
 - **Framework**: Next.js 14 (App Router)
 - **Database**: PostgreSQL with Prisma ORM
-- **Authentication**: NextAuth.js (GitHub, Google)
+- **Authentication**: NextAuth.js (Google)
 - **Styling**: Tailwind CSS
 - **Icons**: Lucide React
 - **Language**: TypeScript
@@ -87,7 +87,7 @@ A modern, feature-rich URL shortener built with Next.js 14, offering custom doma
 
 ### Creating Short Links
 
-1. Sign in with your GitHub or Google account
+1. Sign in with your Google account
 2. Go to the Dashboard
 3. Click "Create New Link"
 4. Enter your URL and optional settings:
