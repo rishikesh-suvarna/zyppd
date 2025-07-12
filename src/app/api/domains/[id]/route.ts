@@ -1,13 +1,15 @@
-
-import { NextRequest, NextResponse } from 'next/server';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
 export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
+  request: Request,
+  context: { params: any }
 ) {
+  const { id } = context.params;
+
   try {
     const session = await getServerSession(authOptions);
 
@@ -21,7 +23,7 @@ export async function DELETE(
     // Verify domain ownership
     const domain = await prisma.domain.findFirst({
       where: {
-        id: params.id,
+        id: id,
         userId: session.user.id
       }
     });
@@ -35,7 +37,7 @@ export async function DELETE(
 
     // Check if domain is being used by any links
     const linksUsingDomain = await prisma.link.count({
-      where: { domainId: params.id }
+      where: { domainId: id }
     });
 
     if (linksUsingDomain > 0) {
@@ -46,7 +48,7 @@ export async function DELETE(
     }
 
     await prisma.domain.delete({
-      where: { id: params.id }
+      where: { id: id }
     });
 
     return NextResponse.json({ message: 'Domain deleted successfully' });
