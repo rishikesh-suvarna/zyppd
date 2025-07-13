@@ -203,7 +203,7 @@ export default function TermsOfServicePage() {
               These terms were last updated on {parseDate(updatedDate, true)}. Please review them periodically for changes.
             </p>
             <div className="mt-4 space-x-4">
-              <Link href="/privacy" className="text-gray-400 hover:text-white transition-colors text-sm">
+              <Link href="/privacy-policy" className="text-gray-400 hover:text-white transition-colors text-sm">
                 Privacy Policy
               </Link>
               {/* <span className="text-gray-600">•</span>

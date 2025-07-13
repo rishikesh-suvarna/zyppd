@@ -1,5 +1,6 @@
 'use client';
 
+import { parseDate } from '@/utils/parseDate';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Shield, Eye, Lock, Database, UserCheck } from 'lucide-react';
 import Link from 'next/link';
@@ -57,6 +58,8 @@ export default function PrivacyPolicyPage() {
     "Withdraw consent"
   ];
 
+  const updatedDate = new Date(`2025-07-13`);
+
   return (
     <div className="min-h-screen bg-black">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -81,7 +84,7 @@ export default function PrivacyPolicyPage() {
               </div>
               <div>
                 <h1 className="text-3xl font-bold text-white">Privacy Policy</h1>
-                <p className="text-gray-400 mt-1">Last updated: January 15, 2025</p>
+                <p className="text-gray-400 mt-1">Last updated: {parseDate(updatedDate, true)}</p>
               </div>
             </div>
 
@@ -287,16 +290,16 @@ export default function PrivacyPolicyPage() {
             variants={itemVariants}
           >
             <p className="text-gray-500 text-sm">
-              This Privacy Policy was last updated on January 15, 2025. Please review it periodically for changes.
+              This Privacy Policy was last updated on {parseDate(updatedDate, true)}. Please review it periodically for changes.
             </p>
             <div className="mt-4 space-x-4">
-              <Link href="/terms" className="text-gray-400 hover:text-white transition-colors text-sm">
+              <Link href="/terms-of-service" className="text-gray-400 hover:text-white transition-colors text-sm">
                 Terms of Service
               </Link>
-              <span className="text-gray-600">•</span>
+              {/* <span className="text-gray-600">•</span>
               <Link href="/contact" className="text-gray-400 hover:text-white transition-colors text-sm">
                 Contact Us
-              </Link>
+              </Link> */}
             </div>
           </motion.div>
         </motion.div>
