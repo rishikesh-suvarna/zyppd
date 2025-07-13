@@ -9,7 +9,7 @@ A modern, feature-rich URL shortener built with Next.js 14, offering custom doma
 - Password protection for links
 - Link expiration dates
 - Basic analytics (clicks, countries, referrers)
-- Branded short links with zyppd.com domain
+- Branded short links with zyppd.cc domain
 
 ### 👑 Premium Tier
 - Custom domains (use your own domain)

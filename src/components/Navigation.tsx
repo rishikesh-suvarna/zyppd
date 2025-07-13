@@ -2,7 +2,7 @@
 
 import { useSession, signOut } from 'next-auth/react';
 import Link from 'next/link';
-import { Link2, User, LogOut, BarChart3 } from 'lucide-react';
+import { User, LogOut, BarChart3 } from 'lucide-react';
 import { useState } from 'react';
 import Image from 'next/image';
 
@@ -16,10 +16,16 @@ export function Navigation() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
-              <Link2 size={20} className="text-black" />
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center">
+              <Image
+                src="/icon-w.png"
+                alt="Zyppd Logo"
+                width={32}
+                height={32}
+                className="w-8 h-8 rounded-lg"
+              />
             </div>
-            <span className="text-xl font-bold text-white">Zyppd</span>
+            <span className="text-xl font-bold text-white">ZYPPD.CC</span>
           </Link>
 
           {/* Desktop Navigation */}

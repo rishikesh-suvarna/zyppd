@@ -19,12 +19,12 @@ export const metadata: Metadata = {
     'short links',
     'Zyppd'
   ],
-  authors: [{ name: 'Zyppd Team', url: 'https://zyppd.com' }],
+  authors: [{ name: 'Zyppd Team', url: 'https://www.zyppd.cc' }],
   creator: 'Zyppd',
   publisher: 'Zyppd',
   openGraph: {
     type: 'website',
-    url: 'https://zyppd.com',
+    url: 'https://www.zyppd.cc',
     siteName: 'Zyppd',
     title: 'Zyppd - Professional URL Shortener',
     description: 'Create custom short links with analytics, password protection, and custom domains.',
