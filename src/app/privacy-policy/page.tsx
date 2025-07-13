@@ -1,5 +1,6 @@
 'use client';
 
+import Footer from '@/components/Footer';
 import { parseDate } from '@/utils/parseDate';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Shield, Eye, Lock, Database, UserCheck } from 'lucide-react';
@@ -285,23 +286,7 @@ export default function PrivacyPolicyPage() {
           </motion.div>
 
           {/* Footer */}
-          <motion.div
-            className="mt-12 text-center border-t border-gray-800 pt-8"
-            variants={itemVariants}
-          >
-            <p className="text-gray-500 text-sm">
-              This Privacy Policy was last updated on {parseDate(updatedDate, true)}. Please review it periodically for changes.
-            </p>
-            <div className="mt-4 space-x-4">
-              <Link href="/terms-of-service" className="text-gray-400 hover:text-white transition-colors text-sm">
-                Terms of Service
-              </Link>
-              {/* <span className="text-gray-600">•</span>
-              <Link href="/contact" className="text-gray-400 hover:text-white transition-colors text-sm">
-                Contact Us
-              </Link> */}
-            </div>
-          </motion.div>
+          <Footer />
         </motion.div>
       </div>
     </div>

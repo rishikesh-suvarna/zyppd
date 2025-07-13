@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Link2, BarChart3, Shield, Clock, Globe, Zap, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { AnonymousLinkForm } from '@/components/AnonymousLinkForm';
+import Footer from '@/components/Footer';
 
 export default function HomePage() {
   const containerVariants = {
@@ -67,8 +68,8 @@ export default function HomePage() {
 
   const stats = [
     { number: "10K+", label: "Active Users" },
-    { number: "1M+", label: "Links Created" },
-    { number: "50M+", label: "Clicks Tracked" },
+    { number: "10K+", label: "Links Created" },
+    { number: "500K+", label: "Clicks Tracked" },
     { number: "99.9%", label: "Uptime" }
   ];
 
@@ -199,6 +200,8 @@ export default function HomePage() {
           </motion.div>
         </div>
       </motion.div>
-    </div>
+
+      <Footer />
+    </div >
   );
 }

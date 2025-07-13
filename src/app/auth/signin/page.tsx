@@ -71,7 +71,6 @@ function SignInContent() {
     'Password protection & expiration',
     'Custom domains (Premium)',
     'Detailed click tracking',
-    'Team collaboration tools'
   ];
 
   return (
@@ -92,7 +91,7 @@ function SignInContent() {
                 </div>
               </div>
               <h1 className="text-3xl font-bold text-white mb-3">
-                Sign in to your account
+                Sign in / up to your account
               </h1>
               <p className="text-gray-400">
                 Access your dashboard and manage your links
@@ -147,7 +146,7 @@ function SignInContent() {
               className="mt-6 text-center text-sm text-gray-500"
               variants={itemVariants}
             >
-              By signing in, you agree to our Terms of Service and Privacy Policy
+              By signing in / up, you agree to our <Link className='text-gray-200' href="/terms-of-service">Terms of Service</Link> and <Link className='text-gray-200' href="/privacy-policy">Privacy Policy</Link>
             </motion.div>
           </motion.div>
 
@@ -197,17 +196,6 @@ function SignInContent() {
               </p>
             </motion.div>
 
-            <motion.div
-              className="mt-6 text-center lg:text-left"
-              variants={itemVariants}
-            >
-              <Link
-                href="/"
-                className="text-gray-400 hover:text-white transition-colors text-sm"
-              >
-                ← Back to homepage
-              </Link>
-            </motion.div>
           </motion.div>
         </div>
       </div>
