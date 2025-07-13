@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Copy, ExternalLink, Eye, Trash2, Calendar, Shield, CheckCircle2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { parseDate } from '@/utils/parseDate';
+import { useAnalytics } from './AnalyticsProvider';
 
 interface Link {
   password: any;
@@ -29,12 +30,18 @@ interface LinksListProps {
 
 export function LinksList({ links, loading, onLinkDeleted }: LinksListProps) {
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const { trackEvent } = useAnalytics();
 
   const copyToClipboard = async (text: string, id: string) => {
     try {
       await navigator.clipboard.writeText(text);
       setCopiedId(id);
       setTimeout(() => setCopiedId(null), 2000);
+      trackEvent('link_copied', {
+        event_category: 'engagement',
+        link_id: id,
+        is_anonymous: true,
+      });
     } catch (err) {
       console.error('Failed to copy:', err);
     }
