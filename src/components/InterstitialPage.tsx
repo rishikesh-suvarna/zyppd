@@ -23,7 +23,7 @@ export function InterstitialPage({
   description,
   linkId
 }: InterstitialPageProps) {
-  const [countdown, setCountdown] = useState(3);
+  const [countdown, setCountdown] = useState(5);
   const [isRedirecting, setIsRedirecting] = useState(false);
 
   useEffect(() => {
@@ -167,15 +167,15 @@ export function InterstitialPage({
                 <span className="text-gray-400 text-sm">Going to:</span>
                 <ExternalLink size={16} className="text-gray-400" />
               </div>
-              <div className="text-white font-medium break-all">
-                {getDomain(originalUrl)}
-              </div>
               {title && (
-                <div className="text-gray-300 text-sm mt-1">{title}</div>
+                <div className="text-gray-300 text-start text-sm mt-1">{title}</div>
               )}
               {description && (
-                <div className="text-gray-400 text-xs mt-1">{description}</div>
+                <div className="text-gray-400 text-start text-xs mt-1">{description}</div>
               )}
+              <div className="text-white text-start font-medium break-all">
+                {getDomain(originalUrl)}
+              </div>
             </motion.div>
 
             {/* Skip Button */}
