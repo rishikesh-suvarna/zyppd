@@ -12,7 +12,7 @@ const createLinkSchema = z.object({
   title: z.string().optional(),
   description: z.string().optional(),
   password: z.string().optional(),
-  expiresAt: z.string().datetime().optional(),
+  expiresAt: z.string().optional(),
   domainId: z.string().optional(),
 });
 
@@ -42,6 +42,19 @@ export async function POST(request: NextRequest) {
     }
 
     const data = validationResult.data;
+
+    let expiresAtDate: Date | null = null;
+    if (data.expiresAt) {
+      const parsed = new Date(data.expiresAt);
+      if (!isNaN(parsed.getTime())) {
+        expiresAtDate = parsed;
+      } else {
+        return NextResponse.json(
+          { error: 'Invalid expiresAt format. Please provide a valid date/time.' },
+          { status: 400 }
+        );
+      }
+    }
 
     // Generate short code if not provided
     let shortCode = data.shortCode || nanoid(8);
@@ -94,7 +107,7 @@ export async function POST(request: NextRequest) {
         title: data.title,
         description: data.description,
         password: hashedPassword,
-        expiresAt: data.expiresAt ? new Date(data.expiresAt) : null,
+        expiresAt: expiresAtDate,
         userId: token.sub,
         domainId: data.domainId,
       },

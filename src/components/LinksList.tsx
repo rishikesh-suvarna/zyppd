@@ -4,6 +4,7 @@
 import { useState } from 'react';
 import { Copy, ExternalLink, Eye, Trash2, Calendar, Shield, CheckCircle2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { parseDate } from '@/utils/parseDate';
 
 interface Link {
   password: any;
@@ -183,10 +184,10 @@ export function LinksList({ links, loading, onLinkDeleted }: LinksListProps) {
                       <Eye size={14} className="mr-1 text-green-400" />
                       {link.clicks} clicks
                     </motion.span>
-                    <span>Created {new Date(link.createdAt).toLocaleDateString()}</span>
+                    <span>Created {parseDate(link.createdAt)}</span>
                     {link.expiresAt && (
                       <span className="text-orange-400">
-                        Expires {new Date(link.expiresAt).toLocaleDateString()}
+                        Expires {parseDate(link.expiresAt)}
                       </span>
                     )}
                   </div>
