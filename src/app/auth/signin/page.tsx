@@ -8,10 +8,13 @@ import { useSearchParams } from 'next/navigation';
 import { Github, Mail, Link2, ArrowRight, CheckCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { useAnalytics } from '@/components/AnalyticsProvider';
 
 function SignInContent() {
   const [providers, setProviders] = useState<Record<string, import('next-auth/react').ClientSafeProvider> | null>(null);
   const [loading, setLoading] = useState(false);
+  const { trackUserSignin } = useAnalytics();
+
   const searchParams = useSearchParams();
   const error = searchParams.get('error');
 
@@ -27,6 +30,7 @@ function SignInContent() {
   const handleSignIn = async (providerId: string) => {
     setLoading(true);
     try {
+      trackUserSignin(providerId);
       await signIn(providerId, { callbackUrl: '/dashboard' });
     } catch (error) {
       console.error('Sign in error:', error);

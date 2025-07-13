@@ -6,6 +6,7 @@ import { useSession } from 'next-auth/react';
 import { X, Link as LinkIcon, Lock, Calendar, FileText, Crown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import { useAnalytics } from './AnalyticsProvider';
 
 interface CreateLinkFormProps {
   onSubmit: (link: any) => void;
@@ -13,6 +14,7 @@ interface CreateLinkFormProps {
 }
 
 export function CreateLinkForm({ onSubmit, onCancel }: CreateLinkFormProps) {
+  const { trackLinkCreation } = useAnalytics();
   const { status } = useSession();
   const [formData, setFormData] = useState({
     originalUrl: '',
@@ -125,6 +127,14 @@ export function CreateLinkForm({ onSubmit, onCancel }: CreateLinkFormProps) {
       }
 
       const newLink = await response.json();
+
+      trackLinkCreation({
+        hasCustomCode: !!formData.shortCode,
+        hasPassword: !!formData.password,
+        hasExpiration: !!formData.expiresAt,
+        isAnonymous: !isAuthenticated,
+      });
+
       onSubmit(newLink);
 
       // Reset form

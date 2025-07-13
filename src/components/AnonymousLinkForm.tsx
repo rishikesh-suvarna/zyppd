@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Copy, ExternalLink, CheckCircle, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import { useAnalytics } from './AnalyticsProvider';
 
 interface AnonymousLinkFormProps {
   onLinkCreated?: (link: any) => void;
@@ -21,6 +22,8 @@ export function AnonymousLinkForm({ onLinkCreated }: AnonymousLinkFormProps) {
   const [error, setError] = useState('');
   const [createdLink, setCreatedLink] = useState<any>(null);
   const [copied, setCopied] = useState(false);
+  const { trackLinkCreation, trackEvent } = useAnalytics();
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,6 +51,14 @@ export function AnonymousLinkForm({ onLinkCreated }: AnonymousLinkFormProps) {
       }
 
       const newLink = await response.json();
+
+      trackLinkCreation({
+        hasCustomCode: !!formData.shortCode,
+        hasPassword: false,
+        hasExpiration: false,
+        isAnonymous: true,
+      });
+
       setCreatedLink(newLink);
       onLinkCreated?.(newLink);
 
@@ -60,6 +71,11 @@ export function AnonymousLinkForm({ onLinkCreated }: AnonymousLinkFormProps) {
       });
     } catch (err) {
       console.error('Create link error:', err);
+      trackEvent('link_creation_error', {
+        event_category: 'error',
+        error_message: err instanceof Error ? err.message : 'Unknown error',
+        is_anonymous: true,
+      });
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);
@@ -72,6 +88,11 @@ export function AnonymousLinkForm({ onLinkCreated }: AnonymousLinkFormProps) {
         await navigator.clipboard.writeText(createdLink.shortUrl);
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
+        trackEvent('link_copied', {
+          event_category: 'engagement',
+          link_id: createdLink.id,
+          is_anonymous: true,
+        });
       } catch (err) {
         console.error('Failed to copy:', err);
       }

@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { CookieSettingsButton } from './CookieProvider';
 
 export default function Footer() {
 
@@ -25,6 +26,8 @@ export default function Footer() {
         <Link href="/privacy-policy" className="text-gray-200 hover:text-white transition-colors text-sm">
           Privacy Policy
         </Link>
+        <span className="text-gray-600">•</span>
+        <CookieSettingsButton />
       </div>
     </motion.div>
   )

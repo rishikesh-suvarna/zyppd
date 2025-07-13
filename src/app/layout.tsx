@@ -3,8 +3,9 @@ import type { Metadata } from 'next';
 import { Lato } from 'next/font/google';
 import { AuthProvider } from '@/components/AuthProvider';
 import { Navigation } from '@/components/Navigation';
-import { Analytics } from "@vercel/analytics/next"
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { CookieProvider } from '@/components/CookieProvider';
+import { AnalyticsProvider } from '@/components/AnalyticsProvider';
+import { AnalyticsDebugInfo, SmartPageViewTracker } from '@/components/PageViewTracker';
 
 const lato = Lato({ subsets: ['latin'], weight: ['100', '300', '400', '700', '900'] });
 
@@ -69,25 +70,19 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="icon" href="/favicon.png" />
-        {/* Google Analytics */}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-45E93S9FW7"></script>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-45E93S9FW7');
-            `,
-          }}
-        />
       </head>
       <body className={lato.className}>
-        <Analytics />
-        <SpeedInsights />
         <AuthProvider>
-          <Navigation />
-          {children}
+          <CookieProvider>
+            <Navigation />
+            {children}
+            {/* Analytics only load after user consent */}
+            <AnalyticsProvider />
+            {/* Smart page view tracking with consent checks */}
+            <SmartPageViewTracker />
+            {/* Debug info in development mode */}
+            <AnalyticsDebugInfo />
+          </CookieProvider>
         </AuthProvider>
       </body>
     </html>
