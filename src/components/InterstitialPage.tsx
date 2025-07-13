@@ -23,7 +23,7 @@ export function InterstitialPage({
   description,
   linkId
 }: InterstitialPageProps) {
-  const [countdown, setCountdown] = useState(5);
+  const [countdown, setCountdown] = useState(10);
   const [isRedirecting, setIsRedirecting] = useState(false);
 
   useEffect(() => {
