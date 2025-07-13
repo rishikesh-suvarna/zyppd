@@ -279,7 +279,7 @@ export function CookieConsentPopup({ onConsentChange, forceShow }: CookieConsent
                 <p className="text-xs text-gray-500">
                   Learn more in our{' '}
                   <a
-                    href="/privacy"
+                    href="/privacy-policy"
                     className="text-white hover:underline"
                     target="_blank"
                     rel="noopener noreferrer"
