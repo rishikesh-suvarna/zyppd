@@ -2,7 +2,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Link as LinkIcon, FileText, Copy, ExternalLink, CheckCircle, AlertCircle } from 'lucide-react';
+import { Copy, ExternalLink, CheckCircle, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 
@@ -79,11 +79,10 @@ export function AnonymousLinkForm({ onLinkCreated }: AnonymousLinkFormProps) {
   };
 
   const itemVariants = {
-    hidden: { opacity: 1, y: 20 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.5, ease: "easeOut" as const }
+      transition: { duration: 0.3, ease: "easeOut" as const }
     }
   };
 
@@ -97,75 +96,57 @@ export function AnonymousLinkForm({ onLinkCreated }: AnonymousLinkFormProps) {
         visible: {
           opacity: 1,
           transition: {
-            staggerChildren: 0.1
+            staggerChildren: 0.05
           }
         }
       }}
     >
       <motion.div
-        className="bg-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-2xl shadow-2xl p-8"
+        className="border border-gray-800 rounded-lg p-8"
         variants={itemVariants}
       >
-        <motion.div
-          className="text-center mb-8"
-          variants={itemVariants}
-        >
-          <h2 className="text-3xl font-bold text-white mb-3 flex items-center justify-center">
-            <LinkIcon size={28} className="mr-3 text-white" />
-            Create Short Link
-          </h2>
-          <p className="text-gray-300">
-            Transform your long URL into a short, shareable link instantly
-          </p>
-        </motion.div>
-
         <AnimatePresence mode="wait">
           {!createdLink ? (
             <motion.form
               onSubmit={handleSubmit}
               className="space-y-6"
               initial={{ opacity: 1 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.3 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
             >
               <motion.div variants={itemVariants}>
-                <label className="text-sm font-medium text-gray-300 mb-3 flex items-center">
-                  <LinkIcon size={16} className="mr-2 text-white" />
-                  Original URL *
+                <label className="block text-sm font-medium text-white mb-2">
+                  Original URL
                 </label>
                 <input
                   type="url"
                   placeholder="https://example.com/very/long/url"
                   value={formData.originalUrl}
                   onChange={(e) => setFormData(prev => ({ ...prev, originalUrl: e.target.value }))}
-                  className="w-full px-4 py-4 bg-black/50 border border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 transition-all text-lg"
+                  className="w-full px-4 py-3 bg-black border border-gray-700 rounded-lg focus:outline-none focus:border-white text-white placeholder-gray-500 transition-colors"
                   required
                 />
               </motion.div>
 
-              <motion.div variants={itemVariants}>
-                <label className="block text-sm font-medium text-gray-300 mb-3">
-                  Custom Short Code (optional)
-                </label>
-                <input
-                  type="text"
-                  placeholder="my-custom-link"
-                  value={formData.shortCode}
-                  onChange={(e) => setFormData(prev => ({ ...prev, shortCode: e.target.value }))}
-                  className="w-full px-4 py-4 bg-black/50 border border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 transition-all"
-                />
-                <p className="text-xs text-gray-400 mt-2">
-                  Leave empty to generate automatically
-                </p>
-              </motion.div>
-
               <motion.div
-                className="grid grid-cols-1 md:grid-cols-2 gap-6"
+                className="grid grid-cols-1 md:grid-cols-2 gap-4"
                 variants={itemVariants}
               >
                 <div>
-                  <label className="text-sm font-medium text-gray-300 mb-3 flex items-center">
-                    <FileText size={16} className="mr-2 text-white" />
+                  <label className="block text-sm font-medium text-white mb-2">
+                    Custom Code (optional)
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="my-link"
+                    value={formData.shortCode}
+                    onChange={(e) => setFormData(prev => ({ ...prev, shortCode: e.target.value }))}
+                    className="w-full px-4 py-3 bg-black border border-gray-700 rounded-lg focus:outline-none focus:border-white text-white placeholder-gray-500 transition-colors"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">
                     Title (optional)
                   </label>
                   <input
@@ -173,32 +154,32 @@ export function AnonymousLinkForm({ onLinkCreated }: AnonymousLinkFormProps) {
                     placeholder="My Link"
                     value={formData.title}
                     onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-                    className="w-full px-4 py-4 bg-black/50 border border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 transition-all"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-3">
-                    Description (optional)
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Brief description"
-                    value={formData.description}
-                    onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                    className="w-full px-4 py-4 bg-black/50 border border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 transition-all"
+                    className="w-full px-4 py-3 bg-black border border-gray-700 rounded-lg focus:outline-none focus:border-white text-white placeholder-gray-500 transition-colors"
                   />
                 </div>
               </motion.div>
 
+              <motion.div variants={itemVariants}>
+                <label className="block text-sm font-medium text-white mb-2">
+                  Description (optional)
+                </label>
+                <input
+                  type="text"
+                  placeholder="Brief description"
+                  value={formData.description}
+                  onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                  className="w-full px-4 py-3 bg-black border border-gray-700 rounded-lg focus:outline-none focus:border-white text-white placeholder-gray-500 transition-colors"
+                />
+              </motion.div>
+
               {error && (
                 <motion.div
-                  className="bg-red-900/30 border border-red-700/50 rounded-xl p-4 backdrop-blur-sm"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
+                  className="border border-gray-700 rounded-lg p-4"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
                   variants={itemVariants}
                 >
-                  <div className="flex items-center text-red-200 text-sm">
+                  <div className="flex items-center text-gray-300 text-sm">
                     <AlertCircle size={16} className="mr-2 flex-shrink-0" />
                     {error}
                   </div>
@@ -208,31 +189,31 @@ export function AnonymousLinkForm({ onLinkCreated }: AnonymousLinkFormProps) {
               <motion.button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-white text-black py-4 px-6 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all font-semibold text-lg shadow-lg hover:shadow-xl"
-                whileHover={{ scale: loading ? 1 : 1.02 }}
-                whileTap={{ scale: loading ? 1 : 0.98 }}
+                className="w-full bg-white text-black py-3 px-6 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium hover:bg-gray-100"
+                whileHover={{ scale: loading ? 1 : 1.01 }}
+                whileTap={{ scale: loading ? 1 : 0.99 }}
                 variants={itemVariants}
               >
                 {loading ? (
-                  <motion.div className="flex items-center justify-center">
+                  <div className="flex items-center justify-center">
                     <motion.div
-                      className="w-5 h-5 border-2 border-black border-t-transparent rounded-full mr-3"
+                      className="w-4 h-4 border-2 border-black border-t-transparent rounded-full mr-2"
                       animate={{ rotate: 360 }}
                       transition={{ repeat: Infinity, duration: 1 }}
                     />
-                    Creating Your Link...
-                  </motion.div>
+                    Creating...
+                  </div>
                 ) : (
                   'Create Short Link'
                 )}
               </motion.button>
 
               <motion.div
-                className="text-center text-sm text-gray-400"
+                className="text-center text-sm text-gray-500"
                 variants={itemVariants}
               >
-                Want more features like password protection and analytics?{' '}
-                <Link href="/auth/signin" className="text-blue-400 hover:text-blue-300 transition-colors">
+                Need password protection or analytics?{' '}
+                <Link href="/auth/signin" className="text-white hover:underline">
                   Sign up for free
                 </Link>
               </motion.div>
@@ -240,52 +221,52 @@ export function AnonymousLinkForm({ onLinkCreated }: AnonymousLinkFormProps) {
           ) : (
             <motion.div
               className="text-center space-y-6"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
             >
               <motion.div
                 className="flex items-center justify-center mb-6"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                transition={{ delay: 0.2, type: "spring" }}
+                transition={{ delay: 0.1, type: "spring" }}
               >
-                <div className="w-16 h-16 bg-green-900/50 rounded-full flex items-center justify-center border border-green-700/50">
-                  <CheckCircle size={32} className="text-green-400" />
+                <div className="w-12 h-12 bg-gray-900 rounded-full flex items-center justify-center border border-gray-700">
+                  <CheckCircle size={24} className="text-white" />
                 </div>
               </motion.div>
 
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
+                transition={{ delay: 0.2 }}
               >
-                <h3 className="text-2xl font-bold text-white mb-2">
-                  Link Created Successfully!
+                <h3 className="text-xl font-semibold text-white mb-2">
+                  Link Created Successfully
                 </h3>
-                <p className="text-gray-300 mb-6">
+                <p className="text-gray-400 mb-6">
                   Your short link is ready to share
                 </p>
               </motion.div>
 
               <motion.div
-                className="bg-black/50 border border-gray-600 rounded-xl p-6 space-y-4"
-                initial={{ opacity: 0, y: 20 }}
+                className="border border-gray-700 rounded-lg p-6 space-y-4"
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
+                transition={{ delay: 0.3 }}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-300 text-sm">Your short link:</span>
+                  <span className="text-gray-400 text-sm">Your short link:</span>
                   <motion.button
                     onClick={copyToClipboard}
-                    className="flex items-center text-blue-400 hover:text-blue-300 transition-colors text-sm"
+                    className="flex items-center text-white hover:text-gray-300 transition-colors text-sm"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
                     {copied ? (
                       <>
                         <CheckCircle size={16} className="mr-1" />
-                        Copied!
+                        Copied
                       </>
                     ) : (
                       <>
@@ -296,8 +277,8 @@ export function AnonymousLinkForm({ onLinkCreated }: AnonymousLinkFormProps) {
                   </motion.button>
                 </div>
 
-                <div className="flex items-center justify-between bg-gray-800/50 rounded-lg p-3">
-                  <span className="text-white font-mono text-lg break-all">
+                <div className="bg-gray-900 rounded-lg p-3 border border-gray-800">
+                  <span className="text-white font-mono break-all">
                     {createdLink.shortUrl}
                   </span>
                 </div>
@@ -306,7 +287,7 @@ export function AnonymousLinkForm({ onLinkCreated }: AnonymousLinkFormProps) {
                   href={createdLink.shortUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center text-blue-400 hover:text-blue-300 transition-colors text-sm"
+                  className="inline-flex items-center text-white hover:text-gray-300 transition-colors text-sm"
                   whileHover={{ scale: 1.05 }}
                 >
                   <ExternalLink size={16} className="mr-1" />
@@ -319,12 +300,12 @@ export function AnonymousLinkForm({ onLinkCreated }: AnonymousLinkFormProps) {
                   setCreatedLink(null);
                   setError('');
                 }}
-                className="bg-gray-700 text-gray-200 px-6 py-3 rounded-xl hover:bg-gray-600 transition-colors font-medium"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                className="border border-gray-700 text-white px-6 py-2 rounded-lg hover:border-gray-600 transition-colors"
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.99 }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.6 }}
+                transition={{ delay: 0.4 }}
               >
                 Create Another Link
               </motion.button>
