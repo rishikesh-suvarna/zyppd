@@ -13,19 +13,18 @@ export function Navigation() {
   return (
     <nav className="bg-black shadow-lg border-b border-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-auto">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center">
+            <div className="w-auto h-auto rounded-lg flex items-center justify-center">
               <Image
-                src="/icon-w.png"
+                src="/logo-horizontal.png"
                 alt="Zyppd Logo"
-                width={32}
+                width={200}
                 height={32}
-                className="w-8 h-8 rounded-lg"
+                className="rounded-lg"
               />
             </div>
-            <span className="text-xl font-bold text-white">ZYPPD.CC</span>
           </Link>
 
           {/* Desktop Navigation */}
