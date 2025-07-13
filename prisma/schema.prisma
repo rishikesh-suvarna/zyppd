@@ -77,9 +77,9 @@ model Link {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  // Relations
-  userId String @map("user_id")
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // Relations - Made userId optional to support anonymous links
+  userId String? @map("user_id")
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   domainId String? @map("domain_id")
   domain   Domain? @relation(fields: [domainId], references: [id])

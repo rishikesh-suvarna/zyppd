@@ -6,7 +6,8 @@ import { nanoid } from 'nanoid';
 import bcrypt from 'bcryptjs';
 import { z } from 'zod';
 
-const createLinkSchema = z.object({
+// Schema for authenticated users (full features)
+const createLinkSchemaAuth = z.object({
   originalUrl: z.string().url('Please enter a valid URL'),
   shortCode: z.string().optional(),
   title: z.string().optional(),
@@ -16,21 +17,27 @@ const createLinkSchema = z.object({
   domainId: z.string().optional(),
 });
 
+// Schema for anonymous users (limited features)
+const createLinkSchemaAnon = z.object({
+  originalUrl: z.string().url('Please enter a valid URL'),
+  shortCode: z.string().optional(),
+  title: z.string().optional(),
+  description: z.string().optional(),
+});
+
 export async function POST(request: NextRequest) {
   const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
-  if (!token || !token.sub) {
-    return NextResponse.json(
-      { error: 'You must be signed in to create links' },
-      { status: 401 }
-    );
-  }
+  const isAuthenticated = !!(token && token.sub);
 
   try {
     const body = await request.json();
     console.log('Request body:', body); // Debug log
 
-    // Validate input data
-    const validationResult = createLinkSchema.safeParse(body);
+    // Use different validation schemas based on authentication status
+    const validationResult = isAuthenticated
+      ? createLinkSchemaAuth.safeParse(body)
+      : createLinkSchemaAnon.safeParse(body);
+
     if (!validationResult.success) {
       return NextResponse.json(
         {
@@ -43,9 +50,36 @@ export async function POST(request: NextRequest) {
 
     const data = validationResult.data;
 
+    // For anonymous users, restrict certain features
+    if (!isAuthenticated) {
+      // Don't allow custom domains for anonymous users
+      if ('domainId' in data) {
+        return NextResponse.json(
+          { error: 'Custom domains are only available for registered users' },
+          { status: 403 }
+        );
+      }
+
+      // Don't allow password protection for anonymous users
+      if ('password' in data) {
+        return NextResponse.json(
+          { error: 'Password protection is only available for registered users' },
+          { status: 403 }
+        );
+      }
+
+      // Don't allow expiration dates for anonymous users
+      if ('expiresAt' in data) {
+        return NextResponse.json(
+          { error: 'Link expiration is only available for registered users' },
+          { status: 403 }
+        );
+      }
+    }
+
     let expiresAtDate: Date | null = null;
-    if (data.expiresAt) {
-      const parsed = new Date(data.expiresAt);
+    if (isAuthenticated && 'expiresAt' in data && data.expiresAt) {
+      const parsed = new Date(String(data.expiresAt));
       if (!isNaN(parsed.getTime())) {
         expiresAtDate = parsed;
       } else {
@@ -75,18 +109,18 @@ export async function POST(request: NextRequest) {
       shortCode = nanoid(8);
     }
 
-    // Hash password if provided
+    // Hash password if provided (only for authenticated users)
     let hashedPassword = null;
-    if (data.password) {
+    if (isAuthenticated && 'password' in data && typeof data.password === 'string' && data.password) {
       hashedPassword = await bcrypt.hash(data.password, 12);
     }
 
-    // Validate domain ownership if specified
-    if (data.domainId) {
+    // Validate domain ownership if specified (only for authenticated users)
+    if (isAuthenticated && 'domainId' in data && data.domainId) {
       const domain = await prisma.domain.findFirst({
         where: {
           id: data.domainId,
-          userId: token.sub,
+          userId: token!.sub!,
           isActive: true,
         },
       });
@@ -100,17 +134,25 @@ export async function POST(request: NextRequest) {
     }
 
     // Create the link
+    const linkData: any = {
+      originalUrl: data.originalUrl,
+      shortCode,
+      title: data.title,
+      description: data.description,
+      password: hashedPassword,
+      expiresAt: expiresAtDate,
+    };
+
+    // Only set userId and domainId for authenticated users
+    if (isAuthenticated) {
+      linkData.userId = token!.sub!;
+      if ('domainId' in data) {
+        linkData.domainId = data.domainId;
+      }
+    }
+
     const link = await prisma.link.create({
-      data: {
-        originalUrl: data.originalUrl,
-        shortCode,
-        title: data.title,
-        description: data.description,
-        password: hashedPassword,
-        expiresAt: expiresAtDate,
-        userId: token.sub,
-        domainId: data.domainId,
-      },
+      data: linkData,
       include: {
         domain: true,
         _count: {
@@ -133,6 +175,7 @@ export async function POST(request: NextRequest) {
       shortUrl: link.domain
         ? `https://${link.domain.domain}/${link.shortCode}`
         : `${process.env.NEXT_PUBLIC_BASE_URL}/${link.shortCode}`,
+      isAnonymous: !isAuthenticated,
     };
 
     console.log('Created link:', response); // Debug log

@@ -3,8 +3,9 @@
 
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
-import { X, Link, Lock, Calendar, FileText } from 'lucide-react';
+import { X, Link as LinkIcon, Lock, Calendar, FileText, Crown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
 
 interface CreateLinkFormProps {
   onSubmit: (link: any) => void;
@@ -12,7 +13,7 @@ interface CreateLinkFormProps {
 }
 
 export function CreateLinkForm({ onSubmit, onCancel }: CreateLinkFormProps) {
-  const { status, data: session } = useSession();
+  const { status } = useSession();
   const [formData, setFormData] = useState({
     originalUrl: '',
     shortCode: '',
@@ -67,46 +68,55 @@ export function CreateLinkForm({ onSubmit, onCancel }: CreateLinkFormProps) {
             exit={{ scale: 0.9, opacity: 0, y: 20 }}
           >
             <h2 className="text-xl font-bold text-white mb-4">Authentication Required</h2>
-            <p className="text-gray-300 mb-4">Please sign in to create links.</p>
-            <button
-              onClick={onCancel}
-              className="w-full bg-black text-white py-2 px-4 rounded-lg transition-colors"
-            >
-              Close
-            </button>
+            <p className="text-gray-300 mb-4">Please sign in to access advanced link features like password protection and analytics.</p>
+            <div className="flex space-x-3">
+              <Link
+                href="/auth/signin"
+                className="flex-1 bg-white text-black py-2 px-4 rounded-lg transition-colors text-center"
+              >
+                Sign In
+              </Link>
+              <button
+                onClick={onCancel}
+                className="flex-1 bg-gray-700 text-white py-2 px-4 rounded-lg transition-colors"
+              >
+                Close
+              </button>
+            </div>
           </motion.div>
         </motion.div>
       </AnimatePresence>
     );
   }
 
+  const isAuthenticated = status === 'authenticated';
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
-    // Check session before submitting
-    if (status !== 'authenticated' || !session) {
-      setError('You must be signed in to create a link.');
-      setLoading(false);
-      return;
-    }
-
     try {
+      const requestBody: any = {
+        originalUrl: formData.originalUrl,
+        shortCode: formData.shortCode || undefined,
+        title: formData.title || undefined,
+        description: formData.description || undefined,
+      };
+
+      // Only include premium features for authenticated users
+      if (isAuthenticated) {
+        if (formData.password) requestBody.password = formData.password;
+        if (formData.expiresAt) requestBody.expiresAt = formData.expiresAt;
+      }
+
       const response = await fetch('/api/links', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify({
-          originalUrl: formData.originalUrl,
-          shortCode: formData.shortCode || undefined,
-          title: formData.title || undefined,
-          description: formData.description || undefined,
-          password: formData.password || undefined,
-          expiresAt: formData.expiresAt || undefined,
-        }),
+        body: JSON.stringify(requestBody),
       });
 
       if (!response.ok) {
@@ -175,8 +185,11 @@ export function CreateLinkForm({ onSubmit, onCancel }: CreateLinkFormProps) {
               variants={itemVariants}
             >
               <h2 className="text-xl font-bold text-white flex items-center">
-                <Link size={20} className="mr-2 text-white" />
+                <LinkIcon size={20} className="mr-2 text-white" />
                 Create New Link
+                {isAuthenticated && (
+                  <Crown size={16} className="ml-2 text-yellow-400" />
+                )}
               </h2>
               <motion.button
                 onClick={onCancel}
@@ -188,10 +201,21 @@ export function CreateLinkForm({ onSubmit, onCancel }: CreateLinkFormProps) {
               </motion.button>
             </motion.div>
 
+            {!isAuthenticated && (
+              <motion.div
+                className="bg-blue-900/20 border border-blue-700/50 rounded-lg p-4 mb-6"
+                variants={itemVariants}
+              >
+                <p className="text-blue-200 text-sm">
+                  💡 <strong>Note:</strong> You&apos;re creating an anonymous link. Sign up for password protection, expiration dates, and analytics!
+                </p>
+              </motion.div>
+            )}
+
             <form onSubmit={handleSubmit} className="space-y-4">
               <motion.div variants={itemVariants}>
                 <label className="text-sm font-medium text-gray-300 mb-2 flex items-center">
-                  <Link size={16} className="mr-2 text-white" />
+                  <LinkIcon size={16} className="mr-2 text-white" />
                   Original URL *
                 </label>
                 <input
@@ -247,32 +271,39 @@ export function CreateLinkForm({ onSubmit, onCancel }: CreateLinkFormProps) {
                 />
               </motion.div>
 
-              <motion.div variants={itemVariants}>
-                <label className="text-sm font-medium text-gray-300 mb-2 flex items-center">
-                  <Lock size={16} className="mr-2 text-white" />
-                  Password Protection (optional)
-                </label>
-                <input
-                  type="password"
-                  placeholder="Enter password"
-                  value={formData.password}
-                  onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
-                  className="w-full px-4 py-3 bg-black border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 transition-all"
-                />
-              </motion.div>
+              {/* Premium Features - Only show for authenticated users */}
+              {isAuthenticated && (
+                <>
+                  <motion.div variants={itemVariants}>
+                    <label className="text-sm font-medium text-gray-300 mb-2 flex items-center">
+                      <Lock size={16} className="mr-2 text-white" />
+                      Password Protection (optional)
+                      <Crown size={12} className="ml-1 text-yellow-400" />
+                    </label>
+                    <input
+                      type="password"
+                      placeholder="Enter password"
+                      value={formData.password}
+                      onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
+                      className="w-full px-4 py-3 bg-black border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 transition-all"
+                    />
+                  </motion.div>
 
-              <motion.div variants={itemVariants}>
-                <label className="text-sm font-medium text-gray-300 mb-2 flex items-center">
-                  <Calendar size={16} className="mr-2 text-white" />
-                  Expiration Date (optional)
-                </label>
-                <input
-                  type="datetime-local"
-                  value={formData.expiresAt}
-                  onChange={(e) => setFormData(prev => ({ ...prev, expiresAt: e.target.value }))}
-                  className="w-full px-4 py-3 bg-black border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white transition-all"
-                />
-              </motion.div>
+                  <motion.div variants={itemVariants}>
+                    <label className="text-sm font-medium text-gray-300 mb-2 flex items-center">
+                      <Calendar size={16} className="mr-2 text-white" />
+                      Expiration Date (optional)
+                      <Crown size={12} className="ml-1 text-yellow-400" />
+                    </label>
+                    <input
+                      type="datetime-local"
+                      value={formData.expiresAt}
+                      onChange={(e) => setFormData(prev => ({ ...prev, expiresAt: e.target.value }))}
+                      className="w-full px-4 py-3 bg-black border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white transition-all"
+                    />
+                  </motion.div>
+                </>
+              )}
 
               {error && (
                 <motion.div
@@ -298,7 +329,7 @@ export function CreateLinkForm({ onSubmit, onCancel }: CreateLinkFormProps) {
                   {loading ? (
                     <motion.div className="flex items-center justify-center">
                       <motion.div
-                        className="w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2"
+                        className="w-4 h-4 border-2 border-black border-t-transparent rounded-full mr-2"
                         animate={{ rotate: 360 }}
                         transition={{ repeat: Infinity, duration: 1 }}
                       />

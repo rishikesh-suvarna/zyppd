@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { Link2, BarChart3, Shield, Clock, Globe, Zap, ArrowRight, Sparkles, Star, CheckCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { AnonymousLinkForm } from '@/components/AnonymousLinkForm';
 
 export default function HomePage() {
   const containerVariants = {
@@ -57,7 +58,8 @@ export default function HomePage() {
       description: "Secure your links with password protection to control access to your content.",
       bgColor: "bg-purple-900/50",
       iconColor: "text-purple-400",
-      gradient: "from-purple-500 to-violet-500"
+      gradient: "from-purple-500 to-violet-500",
+      premium: true
     },
     {
       icon: Clock,
@@ -65,7 +67,8 @@ export default function HomePage() {
       description: "Set expiration dates for your links to automatically disable them after a certain time.",
       bgColor: "bg-orange-900/50",
       iconColor: "text-orange-400",
-      gradient: "from-orange-500 to-red-500"
+      gradient: "from-orange-500 to-red-500",
+      premium: true
     },
     {
       icon: Globe,
@@ -188,12 +191,12 @@ export default function HomePage() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Link
-                href="#features"
+              <a
+                href="#try-now"
                 className="border border-gray-600 text-gray-200 px-8 py-4 rounded-xl hover:bg-gray-800/50 hover:border-gray-500 transition-all duration-200 font-semibold backdrop-blur-sm text-lg"
               >
-                See Features
-              </Link>
+                Try Now
+              </a>
             </motion.div>
           </motion.div>
 
@@ -222,6 +225,36 @@ export default function HomePage() {
             ))}
           </motion.div>
         </div>
+      </motion.div>
+
+      {/* Try It Now Section */}
+      <motion.div
+        id="try-now"
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={containerVariants}
+      >
+        <motion.div className="text-center mb-12" variants={itemVariants}>
+          <motion.div
+            className="inline-flex items-center px-4 py-2 bg-blue-900/20 rounded-full border border-blue-700/50 mb-6"
+            whileHover={{ scale: 1.05 }}
+          >
+            <Link2 size={16} className="text-blue-400 mr-2" />
+            <span className="text-blue-300 text-sm">Try It Now</span>
+          </motion.div>
+          <h2 className="text-4xl font-bold text-white mb-4">
+            Create Your First Short Link
+          </h2>
+          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+            No registration required. Create a short link instantly and see how it works.
+          </p>
+        </motion.div>
+
+        <motion.div variants={itemVariants}>
+          <AnonymousLinkForm />
+        </motion.div>
       </motion.div>
 
       {/* Features Section */}
@@ -312,6 +345,37 @@ export default function HomePage() {
               />
             </motion.div>
           ))}
+        </motion.div>
+
+        {/* CTA Section */}
+        <motion.div
+          className="text-center mt-20"
+          variants={itemVariants}
+        >
+          <motion.div
+            className="bg-gradient-to-r from-blue-900/30 to-purple-900/30 backdrop-blur-sm border border-gray-700 rounded-2xl p-8 max-w-4xl mx-auto"
+            whileHover={{ scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 300 }}
+          >
+            <h3 className="text-3xl font-bold text-white mb-4">
+              Ready to unlock all features?
+            </h3>
+            <p className="text-gray-300 mb-6 text-lg">
+              Sign up for free to get password protection, link expiration, detailed analytics, and much more.
+            </p>
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Link
+                href="/auth/signin"
+                className="bg-white text-black px-8 py-4 rounded-xl transition-all duration-200 font-semibold shadow-lg hover:shadow-xl inline-flex items-center group text-lg"
+              >
+                Create Free Account
+                <ArrowRight size={20} className="ml-2 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </motion.div>
+          </motion.div>
         </motion.div>
       </motion.div>
     </div>
