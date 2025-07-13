@@ -237,14 +237,6 @@ export function InterstitialPage({
           </motion.div>
 
           {/* Security Notice */}
-          <motion.div
-            className="text-center mt-4"
-            variants={itemVariants}
-          >
-            <p className="text-gray-500 text-xs">
-              🔒 This link has been scanned for security threats
-            </p>
-          </motion.div>
         </motion.div>
       </div>
     </>
