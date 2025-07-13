@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Link2, BarChart3, Shield, Clock, Globe, Zap, ArrowRight, CheckCircle } from 'lucide-react';
+import { Link2, BarChart3, Shield, Clock, Globe, Zap, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { AnonymousLinkForm } from '@/components/AnonymousLinkForm';
 
