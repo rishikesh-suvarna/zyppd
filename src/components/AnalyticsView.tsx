@@ -253,7 +253,7 @@ export function AnalyticsView({ link }: { link: Link }) {
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: index * 0.05 + 0.5 }}
                         >
-                          <span className="text-sm text-gray-300">{parseDate(date)}</span>
+                          <span className="text-sm text-gray-300">{parseDate(date, true)}</span>
                           <div className="flex items-center space-x-3">
                             <div className="w-24 bg-gray-700 rounded-full h-2 overflow-hidden">
                               <motion.div

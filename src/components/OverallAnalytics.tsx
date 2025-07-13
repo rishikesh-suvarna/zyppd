@@ -384,7 +384,7 @@ export function OverallAnalytics() {
                       transition={{ delay: index * 0.05 + 0.5 }}
                     >
                       <span className="text-sm text-gray-300">
-                        {parseDate(date)}
+                        {parseDate(date, true)}
                       </span>
                       <div className="flex items-center space-x-3">
                         <div className="w-32 bg-gray-700 rounded-full h-2 overflow-hidden">
