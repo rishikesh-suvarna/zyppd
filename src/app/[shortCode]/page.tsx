@@ -66,7 +66,6 @@ export default async function RedirectPage({ params, searchParams }: RedirectPag
         ipAddress,
         userAgent,
         referer,
-        // Note: You'd integrate with a geo IP service here
         country: null,
         city: null,
       },
