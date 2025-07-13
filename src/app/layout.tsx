@@ -4,6 +4,7 @@ import { Lato } from 'next/font/google';
 import { AuthProvider } from '@/components/AuthProvider';
 import { Navigation } from '@/components/Navigation';
 import { PageTransition } from '@/components/PageTransition';
+import { Analytics } from "@vercel/analytics/next"
 
 const lato = Lato({ subsets: ['latin'], weight: ['100', '300', '400', '700', '900'] });
 
@@ -82,6 +83,7 @@ export default function RootLayout({
         />
       </head>
       <body className={lato.className}>
+        <Analytics />
         <AuthProvider>
           <Navigation />
           <PageTransition>
