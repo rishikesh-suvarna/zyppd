@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { ArrowLeft, Calendar, Globe, Eye, Users, BarChart3, Activity } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
+import { parseDate } from '@/utils/parseDate';
 
 interface Link {
   id: string;
@@ -160,7 +161,7 @@ export function AnalyticsView({ link }: { link: Link }) {
                   </div>
                   <div className="flex items-center">
                     <span className="text-gray-400 w-24">Created:</span>
-                    <span className="text-gray-300">{new Date(link.createdAt).toLocaleDateString()}</span>
+                    <span className="text-gray-300">{parseDate(link.createdAt)}</span>
                   </div>
                 </div>
               </div>
@@ -252,7 +253,7 @@ export function AnalyticsView({ link }: { link: Link }) {
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: index * 0.05 + 0.5 }}
                         >
-                          <span className="text-sm text-gray-300">{new Date(date).toLocaleDateString()}</span>
+                          <span className="text-sm text-gray-300">{parseDate(date)}</span>
                           <div className="flex items-center space-x-3">
                             <div className="w-24 bg-gray-700 rounded-full h-2 overflow-hidden">
                               <motion.div
@@ -342,7 +343,7 @@ export function AnalyticsView({ link }: { link: Link }) {
                         />
                         <div>
                           <span className="text-sm text-gray-300">
-                            {new Date(activity.clickedAt).toLocaleString()}
+                            {parseDate(activity.clickedAt)}
                           </span>
                         </div>
                       </div>

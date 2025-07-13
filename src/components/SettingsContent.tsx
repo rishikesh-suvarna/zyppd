@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
+import { parseDate } from '@/utils/parseDate';
 
 interface UserData {
   id: string;
@@ -333,11 +334,7 @@ export function SettingsContent() {
                           <div className="px-4 py-3 bg-white/5 border border-white/10 rounded-xl">
                             <p className="text-white">
                               {userData?.createdAt
-                                ? new Date(userData.createdAt).toLocaleDateString('en-US', {
-                                  year: 'numeric',
-                                  month: 'long',
-                                  day: 'numeric'
-                                })
+                                ? parseDate(userData.createdAt)
                                 : 'Unknown'
                               }
                             </p>

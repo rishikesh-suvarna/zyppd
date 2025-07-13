@@ -14,6 +14,7 @@ import {
   BarChart3
 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { parseDate } from '@/utils/parseDate';
 
 interface AnalyticsSummary {
   totalLinks: number;
@@ -338,7 +339,7 @@ export function OverallAnalytics() {
                           {activity.title || activity.shortCode}
                         </p>
                         <p className="text-xs text-gray-400">
-                          {new Date(activity.clickedAt).toLocaleString()}
+                          {parseDate(activity.clickedAt)}
                         </p>
                       </div>
                     </div>
@@ -383,7 +384,7 @@ export function OverallAnalytics() {
                       transition={{ delay: index * 0.05 + 0.5 }}
                     >
                       <span className="text-sm text-gray-300">
-                        {new Date(date).toLocaleDateString()}
+                        {parseDate(date)}
                       </span>
                       <div className="flex items-center space-x-3">
                         <div className="w-32 bg-gray-700 rounded-full h-2 overflow-hidden">

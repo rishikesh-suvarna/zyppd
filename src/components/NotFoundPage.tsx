@@ -63,11 +63,11 @@ export function NotFoundPage() {
             variants={iconVariants}
           >
             <motion.div
-              className="w-20 h-20 bg-gradient-to-br from-red-600 to-orange-600 rounded-full flex items-center justify-center shadow-lg relative"
+              className="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-lg relative"
               whileHover={{ scale: 1.05 }}
               transition={{ type: "spring", stiffness: 300 }}
             >
-              <Search size={40} className="text-white" />
+              <Search size={40} className="text-black" />
               <motion.div
                 className="absolute inset-0 rounded-full border-2 border-red-400 opacity-50"
                 animate={{ scale: [1, 1.3, 1], opacity: [0.5, 0, 0.5] }}
