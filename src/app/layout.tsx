@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     description: 'Create custom short links with analytics, password protection, and custom domains.',
     images: [
       {
-        url: '/og-image.jpg',
+        url: '/og-image.png',
         width: 1200,
         height: 630,
         alt: 'Zyppd - Professional URL Shortener',
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     creator: '@zyppd',
     title: 'Zyppd - Professional URL Shortener',
     description: 'Create custom short links with analytics, password protection, and custom domains.',
-    images: ['/og-image.jpg'],
+    images: ['/og-image.png'],
   },
   robots: {
     index: true,
@@ -66,6 +66,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/favicon.png" />
+      </head>
       <body className={lato.className}>
         <AuthProvider>
           <Navigation />
