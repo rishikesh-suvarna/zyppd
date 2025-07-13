@@ -1,3 +1,5 @@
+![Zyppd Logo](https://github.com/rishikesh-suvarna/zyppd/raw/main/public/logo-vertical.png "Zyppd Logo")
+
 # 🔗 Zyppd
 
 A modern, feature-rich URL shortener built with Next.js 14, offering custom domains, advanced analytics, and premium features for businesses and professionals.
