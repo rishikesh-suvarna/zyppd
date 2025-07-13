@@ -6,8 +6,14 @@ import bcrypt from 'bcryptjs';
 import { PasswordForm } from '@/components/PasswordForm';
 import { NotFoundPage } from '@/components/NotFoundPage';
 import { ExpiredPage } from '@/components/ExpiredPage';
+import { InterstitialPage } from '@/components/InterstitialPage';
 
-export default async function RedirectPage({ params, searchParams }: any) {
+interface RedirectPageProps {
+  params: { shortCode: string };
+  searchParams: { password?: string; direct?: string };
+}
+
+export default async function RedirectPage({ params, searchParams }: RedirectPageProps) {
   const { shortCode } = params;
   const headersList = headers();
   const userAgent = (await headersList).get('user-agent') || '';
@@ -19,7 +25,14 @@ export default async function RedirectPage({ params, searchParams }: any) {
   // Find the link
   const link = await prisma.link.findUnique({
     where: { shortCode },
-    include: { domain: true },
+    include: {
+      domain: true,
+      user: {
+        select: {
+          tier: true
+        }
+      }
+    },
   });
 
   if (!link || !link.isActive) {
@@ -62,6 +75,38 @@ export default async function RedirectPage({ params, searchParams }: any) {
     console.error('Error tracking click:', error);
   }
 
-  // Redirect to the original URL
-  redirect(link.originalUrl);
+  // Check if should show interstitial or direct redirect
+  const shouldShowInterstitial = () => {
+    // Skip interstitial if direct parameter is present (for premium users)
+    if (searchParams.direct === 'true') return false;
+
+    // Skip for premium users (if you want to offer this as a perk)
+    if (link.user?.tier === 'PREMIUM') return false;
+
+    // Skip for bots/crawlers
+    const botUserAgents = ['bot', 'crawler', 'spider', 'scraper'];
+    const isBot = botUserAgents.some(bot =>
+      userAgent.toLowerCase().includes(bot)
+    );
+    if (isBot) return false;
+
+    // Show interstitial by default
+    return true;
+  };
+
+  // Direct redirect for special cases
+  if (!shouldShowInterstitial()) {
+    redirect(link.originalUrl);
+  }
+
+  // Show interstitial page
+  return (
+    <InterstitialPage
+      originalUrl={link.originalUrl}
+      shortCode={shortCode}
+      title={link.title ?? undefined}
+      description={link.description ?? undefined}
+      linkId={link.id}
+    />
+  );
 }

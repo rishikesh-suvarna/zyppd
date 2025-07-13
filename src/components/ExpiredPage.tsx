@@ -63,7 +63,7 @@ export function ExpiredPage() {
             variants={iconVariants}
           >
             <motion.div
-              className="w-20 h-20 bg-gradient-to-br from-yellow-600 to-orange-600 rounded-full flex items-center justify-center shadow-lg relative"
+              className="w-20 h-20 bg-black rounded-full flex items-center justify-center shadow-lg relative"
               whileHover={{ scale: 1.05 }}
               transition={{ type: "spring", stiffness: 300 }}
             >
@@ -98,7 +98,7 @@ export function ExpiredPage() {
           >
             <Link
               href="/"
-              className="w-full flex items-center justify-center px-6 py-3 border border-transparent rounded-lg shadow-lg text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transition-all duration-200 group"
+              className="w-full flex items-center justify-center px-6 py-3 border border-transparent rounded-lg shadow-lg text-sm font-medium text-black bg-white transition-all duration-200 group"
             >
               <Home size={16} className="mr-2 group-hover:-translate-y-0.5 transition-transform duration-200" />
               Go to Homepage
@@ -127,11 +127,6 @@ export function ExpiredPage() {
           transition={{ type: "spring", stiffness: 300 }}
         >
           <h3 className="text-lg font-semibold text-white mb-3 flex items-center">
-            <motion.div
-              className="w-2 h-2 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full mr-3"
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ repeat: Infinity, duration: 2 }}
-            />
             Why did this happen?
           </h3>
           <div className="space-y-2 text-sm text-gray-300 text-left">
@@ -159,46 +154,6 @@ export function ExpiredPage() {
           </div>
         </motion.div>
 
-        {/* Floating animation elements */}
-        <motion.div
-          className="absolute top-1/4 left-1/4 w-4 h-4 bg-yellow-500/30 rounded-full"
-          animate={{
-            y: [0, -20, 0],
-            opacity: [0.3, 0.7, 0.3]
-          }}
-          transition={{
-            repeat: Infinity,
-            duration: 3,
-            ease: "easeInOut"
-          }}
-        />
-        <motion.div
-          className="absolute bottom-1/4 right-1/4 w-6 h-6 bg-orange-500/20 rounded-full"
-          animate={{
-            y: [0, 20, 0],
-            opacity: [0.2, 0.5, 0.2]
-          }}
-          transition={{
-            repeat: Infinity,
-            duration: 4,
-            ease: "easeInOut",
-            delay: 1
-          }}
-        />
-
-        {/* Ticking clock animation */}
-        <motion.div
-          className="absolute top-1/3 right-1/3 w-3 h-3 bg-yellow-400/40 rounded-full"
-          animate={{
-            scale: [0, 1, 0],
-            rotate: [0, 360]
-          }}
-          transition={{
-            repeat: Infinity,
-            duration: 2,
-            ease: "easeInOut"
-          }}
-        />
       </motion.div>
     </div>
   );
