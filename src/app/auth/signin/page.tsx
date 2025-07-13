@@ -5,8 +5,9 @@
 import { signIn, getProviders } from 'next-auth/react';
 import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Github, Mail, Link2, ArrowRight } from 'lucide-react';
+import { Github, Mail, Link2, ArrowRight, CheckCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 function SignInContent() {
   const [providers, setProviders] = useState<Record<string, import('next-auth/react').ClientSafeProvider> | null>(null);
@@ -45,157 +46,171 @@ function SignInContent() {
     }
   };
 
-  const getProviderColor = (providerId: string) => {
-    switch (providerId) {
-      case 'github':
-        return 'bg-gray-800 hover:bg-gray-700 text-white border-gray-700';
-      case 'google':
-        return 'bg-white hover:bg-gray-50 text-gray-900 border-gray-600';
-      default:
-        return 'bg-blue-600 hover:bg-blue-700 text-white border-blue-600';
-    }
-  };
-
   const containerVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      y: 0,
       transition: {
-        duration: 0.6,
-        staggerChildren: 0.1
+        duration: 0.3,
+        staggerChildren: 0.05
       }
     }
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 10 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.5 }
+      transition: { duration: 0.3, ease: "easeOut" as const }
     }
   };
 
   const features = [
-    { text: 'Create custom short links', color: 'bg-blue-500' },
-    { text: 'Password protect your links', color: 'bg-green-500' },
-    { text: 'Track detailed analytics', color: 'bg-purple-500' },
-    { text: 'Set expiration dates', color: 'bg-orange-500' },
-    { text: 'Custom domains (Premium)', color: 'bg-pink-500' }
+    'Custom short links with analytics',
+    'Password protection & expiration',
+    'Custom domains (Premium)',
+    'Detailed click tracking',
+    'Team collaboration tools'
   ];
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black py-12 px-4 sm:px-6 lg:px-8">
-      <motion.div
-        className="max-w-md w-full space-y-8"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        <motion.div className="text-center" variants={itemVariants}>
+    <div className="min-h-screen bg-black">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          {/* Left side - Sign in form */}
           <motion.div
-            className="flex justify-center mb-6"
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 300 }}
+            className="max-w-md mx-auto lg:mx-0"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
           >
-            <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
-              <Link2 size={32} className="text-white" />
-            </div>
-          </motion.div>
-          <h2 className="text-3xl font-bold text-white mb-2">
-            Welcome to Zyppd
-          </h2>
-          <p className="text-gray-300">
-            Sign in to start shortening your URLs and tracking analytics
-          </p>
-        </motion.div>
-
-        <motion.div className="mt-8 space-y-4" variants={itemVariants}>
-          {error && (
-            <motion.div
-              className="bg-red-900/50 border border-red-700 rounded-lg p-4 backdrop-blur-sm"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3 }}
-            >
-              <div className="text-red-200 text-sm">
-                {error === 'OAuthSignin' && 'Error occurred during sign in. Please try again.'}
-                {error === 'OAuthCallback' && 'Error occurred during authentication. Please try again.'}
-                {error === 'OAuthCreateAccount' && 'Could not create account. Please try again.'}
-                {error === 'EmailCreateAccount' && 'Could not create account. Please try again.'}
-                {error === 'Callback' && 'Error occurred during sign in. Please try again.'}
-                {error === 'OAuthAccountNotLinked' && 'Account not linked. Please use a different sign in method.'}
-                {error === 'EmailSignin' && 'Check your email for the sign in link.'}
-                {error === 'CredentialsSignin' && 'Invalid credentials. Please check your email and password.'}
-                {error === 'SessionRequired' && 'Please sign in to access this page.'}
-                {!['OAuthSignin', 'OAuthCallback', 'OAuthCreateAccount', 'EmailCreateAccount', 'Callback', 'OAuthAccountNotLinked', 'EmailSignin', 'CredentialsSignin', 'SessionRequired'].includes(error) && 'An error occurred. Please try again.'}
+            <motion.div className="text-center lg:text-left mb-8" variants={itemVariants}>
+              <div className="flex justify-center lg:justify-start mb-6">
+                <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center">
+                  <Link2 size={24} className="text-black" />
+                </div>
               </div>
+              <h1 className="text-3xl font-bold text-white mb-3">
+                Sign in to your account
+              </h1>
+              <p className="text-gray-400">
+                Access your dashboard and manage your links
+              </p>
             </motion.div>
-          )}
 
-          {providers && Object.values(providers).map((provider: any, index: number) => (
-            <motion.button
-              key={provider.name}
-              onClick={() => handleSignIn(provider.id)}
-              disabled={loading}
-              className={`w-full flex items-center justify-center px-4 py-3 border rounded-lg shadow-lg text-sm font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed backdrop-blur-sm hover:shadow-xl group ${getProviderColor(provider.id)}`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 + 0.3 }}
-            >
+            {error && (
               <motion.div
-                className="flex items-center"
-                animate={loading ? { x: [0, 5, 0] } : {}}
-                transition={{ repeat: loading ? Infinity : 0, duration: 0.5 }}
+                className="border border-gray-700 rounded-lg p-4 mb-6"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                variants={itemVariants}
               >
-                {getProviderIcon(provider.id)}
-                <span className="ml-2">
-                  {loading ? 'Signing in...' : `Continue with ${provider.name}`}
-                </span>
-                <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                <div className="text-gray-300 text-sm">
+                  {error === 'OAuthSignin' && 'Error occurred during sign in. Please try again.'}
+                  {error === 'OAuthCallback' && 'Error occurred during authentication. Please try again.'}
+                  {error === 'OAuthCreateAccount' && 'Could not create account. Please try again.'}
+                  {error === 'EmailCreateAccount' && 'Could not create account. Please try again.'}
+                  {error === 'Callback' && 'Error occurred during sign in. Please try again.'}
+                  {error === 'OAuthAccountNotLinked' && 'Account not linked. Please use a different sign in method.'}
+                  {error === 'EmailSignin' && 'Check your email for the sign in link.'}
+                  {error === 'CredentialsSignin' && 'Invalid credentials. Please check your email and password.'}
+                  {error === 'SessionRequired' && 'Please sign in to access this page.'}
+                  {!['OAuthSignin', 'OAuthCallback', 'OAuthCreateAccount', 'EmailCreateAccount', 'Callback', 'OAuthAccountNotLinked', 'EmailSignin', 'CredentialsSignin', 'SessionRequired'].includes(error) && 'An error occurred. Please try again.'}
+                </div>
               </motion.div>
-            </motion.button>
-          ))}
-        </motion.div>
+            )}
 
-        <motion.div
-          className="mt-8 bg-gray-900/50 backdrop-blur-sm rounded-lg shadow-xl p-6 border border-gray-800"
-          variants={itemVariants}
-          whileHover={{ scale: 1.02 }}
-          transition={{ type: "spring", stiffness: 300 }}
-        >
-          <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
+            <motion.div className="space-y-3" variants={itemVariants}>
+              {providers && Object.values(providers).map((provider: any) => (
+                <motion.button
+                  key={provider.name}
+                  onClick={() => handleSignIn(provider.id)}
+                  disabled={loading}
+                  className={`w-full flex items-center justify-center px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${provider.id === 'github'
+                    ? 'bg-white text-black hover:bg-gray-100 border border-gray-200'
+                    : 'border border-gray-700 text-white hover:border-gray-600 hover:bg-gray-900'
+                    }`}
+                  whileHover={{ scale: loading ? 1 : 1.01 }}
+                  whileTap={{ scale: loading ? 1 : 0.99 }}
+                >
+                  {getProviderIcon(provider.id)}
+                  <span className="ml-3 flex-1 text-left">
+                    {loading ? 'Signing in...' : `Continue with ${provider.name}`}
+                  </span>
+                  <ArrowRight size={16} className="opacity-50" />
+                </motion.button>
+              ))}
+            </motion.div>
+
             <motion.div
-              className="w-2 h-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mr-3"
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ repeat: Infinity, duration: 2 }}
-            />
-            Features
-          </h3>
-          <ul className="space-y-3 text-sm text-gray-300">
-            {features.map((feature, index) => (
-              <motion.li
-                key={feature.text}
-                className="flex items-center group"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 + 0.6 }}
-                whileHover={{ x: 5 }}
-              >
+              className="mt-6 text-center text-sm text-gray-500"
+              variants={itemVariants}
+            >
+              By signing in, you agree to our Terms of Service and Privacy Policy
+            </motion.div>
+          </motion.div>
+
+          {/* Right side - Features */}
+          <motion.div
+            className="lg:pl-16"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            <motion.div variants={itemVariants}>
+              <h2 className="text-2xl font-bold text-white mb-3">
+                Why sign up?
+              </h2>
+              <p className="text-gray-400 mb-8">
+                Unlock advanced features and take control of your links
+              </p>
+            </motion.div>
+
+            <motion.div className="space-y-4" variants={itemVariants}>
+              {features.map((feature, index) => (
                 <motion.div
-                  className={`w-2 h-2 ${feature.color} rounded-full mr-3`}
-                  whileHover={{ scale: 1.5 }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                />
-                <span className="group-hover:text-white transition-colors">{feature.text}</span>
-              </motion.li>
-            ))}
-          </ul>
-        </motion.div>
-      </motion.div>
+                  key={feature}
+                  className="flex items-center"
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.05 + 0.2, duration: 0.3 }}
+                >
+                  <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                    <CheckCircle size={14} className="text-black" />
+                  </div>
+                  <span className="text-gray-300">{feature}</span>
+                </motion.div>
+              ))}
+            </motion.div>
+
+            <motion.div
+              className="mt-8 p-6 border border-gray-800 rounded-lg"
+              variants={itemVariants}
+            >
+              <h3 className="text-lg font-semibold text-white mb-2">
+                Free Forever
+              </h3>
+              <p className="text-gray-400 text-sm">
+                Start with our free plan and upgrade when you need more features.
+                No hidden costs, no commitments.
+              </p>
+            </motion.div>
+
+            <motion.div
+              className="mt-6 text-center lg:text-left"
+              variants={itemVariants}
+            >
+              <Link
+                href="/"
+                className="text-gray-400 hover:text-white transition-colors text-sm"
+              >
+                ← Back to homepage
+              </Link>
+            </motion.div>
+          </motion.div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -204,11 +219,7 @@ export default function SignInPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen flex items-center justify-center bg-black">
-        <motion.div
-          className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full"
-          animate={{ rotate: 360 }}
-          transition={{ repeat: Infinity, duration: 1 }}
-        />
+        <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
       </div>
     }>
       <SignInContent />

@@ -3,7 +3,6 @@ import type { Metadata } from 'next';
 import { Lato } from 'next/font/google';
 import { AuthProvider } from '@/components/AuthProvider';
 import { Navigation } from '@/components/Navigation';
-import { PageTransition } from '@/components/PageTransition';
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 
@@ -88,9 +87,7 @@ export default function RootLayout({
         <SpeedInsights />
         <AuthProvider>
           <Navigation />
-          <PageTransition>
-            {children}
-          </PageTransition>
+          {children}
         </AuthProvider>
       </body>
     </html>
