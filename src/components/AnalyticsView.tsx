@@ -7,6 +7,7 @@ import { ArrowLeft, Calendar, Globe, Eye, Users, BarChart3, Activity } from 'luc
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { parseDate } from '@/utils/parseDate';
+import Link from 'next/link';
 
 interface Link {
   id: string;
@@ -157,7 +158,7 @@ export function AnalyticsView({ link }: { link: Link }) {
                   </div>
                   <div className="flex items-center">
                     <span className="text-gray-400 w-24">Original:</span>
-                    <span className="font-medium text-gray-200 truncate">{link.originalUrl}</span>
+                    <Link target='_black' href={link.originalUrl} className="font-medium text-gray-200 truncate max-w-lg block">{link.originalUrl}</Link>
                   </div>
                   <div className="flex items-center">
                     <span className="text-gray-400 w-24">Created:</span>
