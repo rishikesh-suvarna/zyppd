@@ -327,7 +327,7 @@ export function AnalyticsView({ link }: { link: Link }) {
                   <Activity size={20} className="mr-2 text-white" />
                   Recent Activity
                 </h3>
-                <div className="space-y-3 max-h-96 overflow-y-auto">
+                <div className="space-y-3 overflow-y-auto">
                   {analytics.recentAnalytics.map((activity, index) => (
                     <motion.div
                       key={index}
