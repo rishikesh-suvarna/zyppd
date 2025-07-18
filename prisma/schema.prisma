@@ -16,6 +16,7 @@ model User {
   tier          UserTier @default(FREE)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  isAdmin       Boolean  @default(false)
 
   // Relations
   links    Link[]
