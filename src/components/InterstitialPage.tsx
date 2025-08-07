@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
-import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ExternalLink, Shield, BarChart3, Crown, ArrowRight, Clock } from 'lucide-react';
-import Link from 'next/link';
+import { ArrowRight, BarChart3, Clock, Crown, ExternalLink, Shield } from 'lucide-react';
 import Head from 'next/head';
-import { SegmentedCountdown, DigitalCountdown, MorphingCountdown, PulseCountdown } from './Countdown';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { MorphingCountdown } from './Countdown';
 
 interface InterstitialPageProps {
   originalUrl: string;
@@ -23,7 +23,7 @@ export function InterstitialPage({
   description,
   linkId
 }: InterstitialPageProps) {
-  const [countdown, setCountdown] = useState(10);
+  const [countdown, setCountdown] = useState(5);
   const [isRedirecting, setIsRedirecting] = useState(false);
 
   useEffect(() => {
